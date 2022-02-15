@@ -43,7 +43,7 @@ public class MainController {
         return "childAlert";
     }
 
-    //
+    //return list phone of firestationNumber
     @GetMapping("/phoneAlert")
     @ResponseBody
     public String phoneAlert(@RequestParam(name="firestationNumber", required = false, defaultValue = "None")int firestationNumber, Model model) {
@@ -51,7 +51,7 @@ public class MainController {
         return "phoneAlert";
     }
 
-    //
+    //return list person of an address
     @GetMapping("/fire")
     @ResponseBody
     public String fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
@@ -59,7 +59,7 @@ public class MainController {
         return "fire";
     }
 
-    //
+    //return list houses classed by address
     @GetMapping("/flood/stations")
     @ResponseBody
     public String listStations(@RequestParam(name="listStations", required = false, defaultValue = "None")List listStations, Model model) {
@@ -67,7 +67,7 @@ public class MainController {
         return "stations";
     }
 
-    //
+    //return person informations
     @GetMapping("/personInfo")
     @ResponseBody
     public String personInfo(@RequestParam(name="person", required = false, defaultValue = "None")String firstName,@RequestParam(name="person", required = false, defaultValue = "None")String lastName, Model model) {
@@ -78,7 +78,7 @@ public class MainController {
         return "personInfo";
     }
 
-    //
+    //return list of all email of a city
     @GetMapping("/communityEmail")
     @ResponseBody
     public String listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city, Model model) {
