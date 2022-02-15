@@ -6,7 +6,7 @@ public class Person {
     String address;
     String email;
     String phone;
-    String medicalHistory;
+    MedicalRecord medicalHistory;
     String city;
     int zip;
 
@@ -66,11 +66,11 @@ public class Person {
         this.phone = phoneNumber;
     }
 
-    public String getMedicalHistory() {
+    public MedicalRecord getMedicalHistory() {
         return medicalHistory;
     }
 
-    public void setMedicalHistory(String medicalHistory) {
+    public void setMedicalHistory(MedicalRecord medicalHistory) {
         this.medicalHistory = medicalHistory;
     }
 }

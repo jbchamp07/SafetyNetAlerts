@@ -1,13 +1,17 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -28,7 +32,6 @@ public class MainController {
     }
 
     //CRUD medicalRecord
-    //
     @GetMapping("/medicalRecord")
     @ResponseBody
     public String medicalRecord() {
@@ -54,9 +57,22 @@ public class MainController {
     //return list person of an address
     @GetMapping("/fire")
     @ResponseBody
-    public String fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
-        model.addAttribute("address", address);
-        return "fire";
+    public JSONObject fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
+        //model.addAttribute("address", address);
+        //return "fire";
+        Map<String, Person> listPerson = new HashMap<String, Person>();
+        Person person1 = new Person();
+        person1.setFirstName("Jean-Baptiste");
+        person1.setLastName("Champetier");
+        person1.setAddress("rue 123");
+        person1.setCity("St andré de cruizères");
+        person1.setEmail("jb.champetier@gmail.com");
+        person1.setPhoneNumber("0610803898");
+        person1.setZip(111);
+        person1.setMedicalHistory(new MedicalRecord());
+        listPerson.put("person1", person1);
+        JSONObject jo = new JSONObject(listPerson);
+        return jo;
     }
 
     //return list houses classed by address
