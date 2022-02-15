@@ -8,12 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 public class MainController {
 
     //CRUD person
@@ -25,7 +26,6 @@ public class MainController {
     //CRUD fireStation
     //return list person who has stationNumber1
     @GetMapping("/firestation")
-    @ResponseBody
     public String firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber, Model model) {
         model.addAttribute("stationNumber", stationNumber);
         return "firestation";
@@ -33,14 +33,12 @@ public class MainController {
 
     //CRUD medicalRecord
     @GetMapping("/medicalRecord")
-    @ResponseBody
     public String medicalRecord() {
         return "medicalRecord";
     }
 
     //return list kids(18 or less) of an address
     @GetMapping("/childAlert")
-    @ResponseBody
     public String childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
         model.addAttribute("address", address);
         return "childAlert";
@@ -48,7 +46,6 @@ public class MainController {
 
     //return list phone of firestationNumber
     @GetMapping("/phoneAlert")
-    @ResponseBody
     public String phoneAlert(@RequestParam(name="firestationNumber", required = false, defaultValue = "None")int firestationNumber, Model model) {
         model.addAttribute("firestationNumber", firestationNumber);
         return "phoneAlert";
@@ -56,10 +53,8 @@ public class MainController {
 
     //return list person of an address
     @GetMapping("/fire")
-    @ResponseBody
-    public JSONObject fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
+    public Map<String, Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
         //model.addAttribute("address", address);
-        //return "fire";
         Map<String, Person> listPerson = new HashMap<String, Person>();
         Person person1 = new Person();
         person1.setFirstName("Jean-Baptiste");
@@ -71,13 +66,11 @@ public class MainController {
         person1.setZip(111);
         person1.setMedicalHistory(new MedicalRecord());
         listPerson.put("person1", person1);
-        JSONObject jo = new JSONObject(listPerson);
-        return jo;
+        return listPerson;
     }
 
     //return list houses classed by address
     @GetMapping("/flood/stations")
-    @ResponseBody
     public String listStations(@RequestParam(name="listStations", required = false, defaultValue = "None")List listStations, Model model) {
         model.addAttribute("listStations", listStations);
         return "stations";
@@ -85,7 +78,6 @@ public class MainController {
 
     //return person informations
     @GetMapping("/personInfo")
-    @ResponseBody
     public String personInfo(@RequestParam(name="person", required = false, defaultValue = "None")String firstName,@RequestParam(name="person", required = false, defaultValue = "None")String lastName, Model model) {
         Person person = new Person();
         person.setFirstName(firstName);
@@ -96,7 +88,6 @@ public class MainController {
 
     //return list of all email of a city
     @GetMapping("/communityEmail")
-    @ResponseBody
     public String listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city, Model model) {
         model.addAttribute("city", city);
         return "communityEmail";
