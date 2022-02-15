@@ -2,7 +2,10 @@ package com.openclassrooms.SafetyNetAlerts.controller;
 
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
+import com.openclassrooms.SafetyNetAlerts.service.DataServices;
+import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +19,14 @@ import java.util.Map;
 
 @RestController
 public class MainController {
+
+    final DataServices dataServices;
+    final PersonServices personServices;
+
+    public MainController(DataServices dataServices, PersonServices personServices) {
+        this.dataServices = dataServices;
+        this.personServices = personServices;
+    }
 
     //CRUD person
     @GetMapping("/person")
@@ -53,9 +64,8 @@ public class MainController {
 
     //return list person of an address
     @GetMapping("/fire")
-    public Map<String, Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
-        //model.addAttribute("address", address);
-        Map<String, Person> listPerson = new HashMap<String, Person>();
+    public List<Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
+        /*Map<String, Person> listPerson = new HashMap<String, Person>();I
         Person person1 = new Person();
         person1.setFirstName("Jean-Baptiste");
         person1.setLastName("Champetier");
@@ -66,7 +76,8 @@ public class MainController {
         person1.setZip(111);
         person1.setMedicalHistory(new MedicalRecord());
         listPerson.put("person1", person1);
-        return listPerson;
+        return listPerson;*/
+        return personServices.findPersonByAddress(address);
     }
 
     //return list houses classed by address

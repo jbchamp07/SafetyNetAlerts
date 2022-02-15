@@ -1,14 +1,14 @@
 package com.openclassrooms.SafetyNetAlerts.model;
 
 public class Person {
-    String firstName;
-    String lastName;
-    String address;
-    String email;
-    String phone;
-    MedicalRecord medicalHistory;
-    String city;
-    int zip;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private String email;
+    private String phone;
+    private MedicalRecord medicalHistory;
+    private String city;
+    private int zip;
 
     public String getCity() {
         return city;
