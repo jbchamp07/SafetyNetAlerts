@@ -37,9 +37,8 @@ public class MainController {
     //CRUD fireStation
     //return list person who has stationNumber1
     @GetMapping("/firestation")
-    public String firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber, Model model) {
-        model.addAttribute("stationNumber", stationNumber);
-        return "firestation";
+    public List<Person> firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber, Model model) {
+        return personServices.findPersonByFireStation(stationNumber);
     }
 
     //CRUD medicalRecord
@@ -65,18 +64,6 @@ public class MainController {
     //return list person of an address
     @GetMapping("/fire")
     public List<Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
-        /*Map<String, Person> listPerson = new HashMap<String, Person>();I
-        Person person1 = new Person();
-        person1.setFirstName("Jean-Baptiste");
-        person1.setLastName("Champetier");
-        person1.setAddress("rue 123");
-        person1.setCity("St andré de cruizères");
-        person1.setEmail("jb.champetier@gmail.com");
-        person1.setPhoneNumber("0610803898");
-        person1.setZip(111);
-        person1.setMedicalHistory(new MedicalRecord());
-        listPerson.put("person1", person1);
-        return listPerson;*/
         return personServices.findPersonByAddress(address);
     }
 
@@ -89,12 +76,8 @@ public class MainController {
 
     //return person informations
     @GetMapping("/personInfo")
-    public String personInfo(@RequestParam(name="person", required = false, defaultValue = "None")String firstName,@RequestParam(name="person", required = false, defaultValue = "None")String lastName, Model model) {
-        Person person = new Person();
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        model.addAttribute("listStations", person);
-        return "personInfo";
+    public List<Person> personInfo(@RequestParam(name="person", required = false, defaultValue = "None")String firstName,@RequestParam(name="person", required = false, defaultValue = "None")String lastName, Model model) {
+        return personServices.allPersons();
     }
 
     //return list of all email of a city

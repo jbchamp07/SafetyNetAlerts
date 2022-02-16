@@ -21,10 +21,16 @@ public class PersonServices {
     }
 
     public List<Person> findPersonByAddress(String address){
-        List<JSONObject> listPersons = dataServices.getListPersons();
-        Gson gson = new Gson();
-        List<Person> personList2 = listPersons.stream().map(item -> gson.fromJson(item.toString(), Person.class)).collect(Collectors.toList());
-        return personList2.stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
+        //List<JSONObject> listPersons = dataServices.getListPersons();
+        return dataServices.getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
+    }
+
+    public List<Person> allPersons(){
+        return dataServices.getListPersons2().stream().collect(Collectors.toList());
+    }
+
+    public List<Person> findPersonByFireStation(int fireStation){
+        return dataServices.listPersonOfAFireStation(fireStation);
     }
 
 }
