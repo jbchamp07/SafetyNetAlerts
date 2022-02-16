@@ -64,7 +64,6 @@ public class DataServices {
 
     private String fireStationAddress;
     public List<Person> listPersonOfAFireStation(int stationNumber) {
-
         for (int i = 0;i < listFireStations2.size();i++) {
             if(listFireStations2.get(i).getStation() == stationNumber){
                 fireStationAddress = listFireStations2.get(i).getAddress();
@@ -72,6 +71,25 @@ public class DataServices {
         }
         listPersonOfAFireStation = listPersons2.stream().filter(item -> item.getAddress().toUpperCase().equals(fireStationAddress.toUpperCase())).collect(Collectors.toList());
         return listPersonOfAFireStation;
+    }
+
+    public List<String> listPhoneOfAFireStation(int stationNumber) {
+        listPersonOfAFireStation = listPersonOfAFireStation(stationNumber);
+        List<String> listPhone = new ArrayList<>();
+        for(int i = 0;i < listPersonOfAFireStation.size();i++){
+            listPhone.add(listPersonOfAFireStation.get(i).getPhoneNumber());
+        }
+        return listPhone;
+    }
+
+    public List<String> listEmailOfACity(String city) {
+        List<String> listEmail = new ArrayList<>();
+        for(int i = 0;i < listPersons2.size();i++){
+            if(listPersons2.get(i).getCity().toUpperCase().equals(city.toUpperCase())){
+                listEmail.add(listPersons2.get(i).getEmail());
+            }
+        }
+        return listEmail;
     }
 
 }

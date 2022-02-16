@@ -56,9 +56,9 @@ public class MainController {
 
     //return list phone of firestationNumber
     @GetMapping("/phoneAlert")
-    public String phoneAlert(@RequestParam(name="firestationNumber", required = false, defaultValue = "None")int firestationNumber, Model model) {
-        model.addAttribute("firestationNumber", firestationNumber);
-        return "phoneAlert";
+    public List<String> phoneAlert(@RequestParam(name="firestation", required = false, defaultValue = "None")int firestationNumber, Model model) {
+
+        return personServices.findPhoneByFireStation(firestationNumber);
     }
 
     //return list person of an address
@@ -82,9 +82,8 @@ public class MainController {
 
     //return list of all email of a city
     @GetMapping("/communityEmail")
-    public String listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city, Model model) {
-        model.addAttribute("city", city);
-        return "communityEmail";
+    public List<String> listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city, Model model) {
+        return personServices.findEmailByCity(city);
     }
 
 }

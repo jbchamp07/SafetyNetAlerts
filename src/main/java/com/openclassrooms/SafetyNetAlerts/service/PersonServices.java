@@ -33,4 +33,12 @@ public class PersonServices {
         return dataServices.listPersonOfAFireStation(fireStation);
     }
 
+    public List<String> findPhoneByFireStation(int fireStation){
+        return dataServices.listPhoneOfAFireStation(fireStation);
+    }
+
+    public List<String> findEmailByCity(String city){
+        return dataServices.listEmailOfACity(city);
+    }
+
 }
