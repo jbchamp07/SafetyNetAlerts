@@ -8,10 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +28,14 @@ public class MainController {
     //CRUD person
     @GetMapping("/person")
     public String person() {
+        return "person";
+    }
+    @PostMapping("/person")
+    public String personPost(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
+        return "person";
+    }
+    @DeleteMapping("/person")
+    public String personDelete(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
         return "person";
     }
 

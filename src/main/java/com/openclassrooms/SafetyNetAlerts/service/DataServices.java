@@ -92,4 +92,16 @@ public class DataServices {
         return listEmail;
     }
 
+    public void addPerson() {
+
+    }
+
+    public void updatePerson() {
+
+    }
+
+    public void deletePerson() {
+
+    }
+
 }
