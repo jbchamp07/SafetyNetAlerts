@@ -42,7 +42,7 @@ public class MainController {
     }
     @PutMapping("/person/{firstName}/{lastName}")
     public String personPut(@PathVariable String firstName, @PathVariable String lastName) {
-        personServices.
+        personServices.updateAPerson("a","b","c","d",1,"e","f");
         return "person";
     }
 
