@@ -28,21 +28,23 @@ public class MainController {
     //CRUD person
     @GetMapping("/person")
     public String person() {
+        personServices.findAPerson("John","Boyd");
         return "person";
     }
     @PostMapping("/person")
-    public String personPost(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
+    public String personPost(@RequestParam(name="firstName", required=false, defaultValue="None") int firstName) {
         return "person";
     }
-    @DeleteMapping("/person")
-    public String personDelete(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
+    @DeleteMapping("/person/{firstName}/{lastName}")
+    public String personDelete(@PathVariable String firstName, @PathVariable String lastName) {
+        personServices.findAPerson(firstName,lastName);
         return "person";
     }
 
     //CRUD fireStation
     //return list person who has stationNumber1
     @GetMapping("/firestation")
-    public List<Person> firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber, Model model) {
+    public List<Person> firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
         return personServices.findPersonByFireStation(stationNumber);
     }
 
@@ -61,7 +63,7 @@ public class MainController {
 
     //return list phone of firestationNumber
     @GetMapping("/phoneAlert")
-    public List<String> phoneAlert(@RequestParam(name="firestation", required = false, defaultValue = "None")int firestationNumber, Model model) {
+    public List<String> phoneAlert(@RequestParam(name="firestation", required = false, defaultValue = "None")int firestationNumber) {
 
         return personServices.findPhoneByFireStation(firestationNumber);
     }

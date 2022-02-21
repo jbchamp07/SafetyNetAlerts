@@ -1,6 +1,9 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,11 +40,16 @@ public class DataServices {
     final String path = "C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data.json";
     private List<Person> listPersonOfAFireStation;
 
+    private JSONParser parser;
+    private Object obj;
+    private JSONObject jo;
+    private Gson gson;
+
     public DataServices() throws IOException, ParseException {
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(new FileReader(path));
-        JSONObject jo = (JSONObject) obj;
-        Gson gson = new Gson();
+        parser = new JSONParser();
+        obj = parser.parse(new FileReader(path));
+        jo = (JSONObject) obj;
+        gson = new Gson();
 
         listPersons = (List<JSONObject>) jo.get("persons");
         listMedicalRecords = (List<JSONObject>) jo.get("medicalrecords");
@@ -100,8 +109,62 @@ public class DataServices {
 
     }
 
-    public void deletePerson() {
+    public void deletePerson(String firstName, String lastName) {
+        Person person = null;
+        //person = listPersons2.stream().filter(item -> item.getFirstName().toUpperCase().equals(firstName.toUpperCase())).findFirst().get();
+
+        for(int i = 0;i < listPersons2.size();i++) {
+            if( (listPersons2.get(i).getFirstName().equals(firstName) ) && ( listPersons2.get(i).getLastName().equals(lastName)) ) {
+                person = listPersons2.get(i);
+            }
+        }
+        listPersons2.remove(person);
+        listMedicalRecords2.remove(person.getMedicalHistory());
+        jo.remove("persons",person);
+        try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
+            file.write(String.valueOf(jo));
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*JSONArray listPersonJson = new JSONArray();
+        JSONArray listFirestationJson = new JSONArray();
+        JSONArray listMedicalRecordJson = new JSONArray();
+        JSONObject jsonObject;
+        for(int i = 0; i < listPersons2.size();i++) {
+            jsonObject = new JSONObject();
+            jsonObject.put("firstName", listPersons2.get(i).getFirstName());
+            jsonObject.put("lastName", listPersons2.get(i).getLastName());
+            jsonObject.put("address", listPersons2.get(i).getAddress());
+            jsonObject.put("city", listPersons2.get(i).getCity());
+            jsonObject.put("zip", listPersons2.get(i).getZip());
+            jsonObject.put("phone", listPersons2.get(i).getPhoneNumber());
+            jsonObject.put("email", listPersons2.get(i).getEmail());
+            listPersonJson.add(jsonObject);
+        }
+        for(int i = 0; i < listFireStations2.size();i++) {
+            jsonObject = new JSONObject();
+            jsonObject.put("address", listFireStations2.get(i).getAddress());
+            jsonObject.put("station", listFireStations2.get(i).getStation());
+            listFirestationJson.add(jsonObject);
+        }
+        for(int i = 0; i < listMedicalRecords2.size();i++) {
+            jsonObject = new JSONObject();
+            jsonObject.put("firstName", listMedicalRecords2.get(i).getFirstName());
+            jsonObject.put("lastName", listMedicalRecords2.get(i).getLastName());
+            jsonObject.put("birthdate", listMedicalRecords2.get(i).getBirthDate());
+            jsonObject.put("medications", listMedicalRecords2.get(i).getMedications());
+            jsonObject.put("allergies", listMedicalRecords2.get(i).getAllergies());
+            listMedicalRecordJson.add(jsonObject);
+        }
+
+        try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
+            file.write("{\n" + "    \"persons\": " + listPersonJson.toJSONString() + "\n\",firestations\": " + listFirestationJson + "\n\",medicalrecords\": " + listMedicalRecordJson + "}");
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
 
     }
-
 }

@@ -1,5 +1,7 @@
 package com.openclassrooms.SafetyNetAlerts.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Person {
     private String firstName;
     private String lastName;
@@ -65,7 +67,7 @@ public class Person {
     public void setPhoneNumber(String phoneNumber) {
         this.phone = phoneNumber;
     }
-
+    @JsonIgnore
     public MedicalRecord getMedicalHistory() {
         return medicalHistory;
     }

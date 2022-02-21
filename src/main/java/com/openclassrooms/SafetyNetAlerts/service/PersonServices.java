@@ -41,4 +41,8 @@ public class PersonServices {
         return dataServices.listEmailOfACity(city);
     }
 
+    public void findAPerson(String firstName,String lastName){
+        dataServices.deletePerson(firstName,lastName);
+    }
+
 }
