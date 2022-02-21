@@ -101,12 +101,38 @@ public class DataServices {
         return listEmail;
     }
 
-    public void addPerson() {
+    public void updatePerson(String firstName, String lastName,String address,String city, int zip, String phone, String email) {
+        Person person = new Person();
+        for(int i = 0;i < listPersons2.size();i++){
+            if(listPersons2.get(i).getFirstName().toUpperCase().equals(firstName.toUpperCase())){
+                if(listPersons2.get(i).getLastName().toUpperCase().equals(lastName.toUpperCase())){
+                    person = listPersons2.get(i);
+                }
+            }
+        }
+        listPersons2.remove(person);
+        person.setAddress(address);
+        person.setCity(city);
+        person.setZip(zip);
+        person.setPhoneNumber(phone);
+        person.setEmail(email);
+        listPersons2.add(person);
+        updateJsonFile();
 
     }
 
-    public void updatePerson() {
-
+    public void addPerson(String firstName, String lastName,String address,String city, int zip, String phone, String email){
+        Person person = new Person();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setAddress(address);
+        person.setCity(city);
+        person.setZip(zip);
+        person.setPhoneNumber(phone);
+        person.setEmail(email);
+        listPersons2.add(person);
+        jo.put("person",person);
+        updateJsonFile();
     }
 
     public void deletePerson(String firstName, String lastName) {
@@ -120,13 +146,9 @@ public class DataServices {
         }
         listPersons2.remove(person);
         listMedicalRecords2.remove(person.getMedicalHistory());
-        jo.remove("persons",person);
-        try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
-            file.write(String.valueOf(jo));
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        jo.remove(person);
+
+        updateJsonFile();
 
         /*JSONArray listPersonJson = new JSONArray();
         JSONArray listFirestationJson = new JSONArray();
@@ -166,5 +188,14 @@ public class DataServices {
             e.printStackTrace();
         }*/
 
+    }
+
+    public void updateJsonFile(){
+        try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
+            file.write(String.valueOf(jo));
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

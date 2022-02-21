@@ -28,16 +28,21 @@ public class MainController {
     //CRUD person
     @GetMapping("/person")
     public String person() {
-        personServices.findAPerson("John","Boyd");
         return "person";
     }
-    @PostMapping("/person")
-    public String personPost(@RequestParam(name="firstName", required=false, defaultValue="None") int firstName) {
+    @PostMapping("/person/{firstName}/{lastName}")
+    public String personPost(@PathVariable String firstName, @PathVariable String lastName) {
+        personServices.addAPerson("a","b","c","d",1,"e","f");
         return "person";
     }
     @DeleteMapping("/person/{firstName}/{lastName}")
     public String personDelete(@PathVariable String firstName, @PathVariable String lastName) {
-        personServices.findAPerson(firstName,lastName);
+        personServices.findAPerson("John","Boyd");
+        return "person";
+    }
+    @PutMapping("/person/{firstName}/{lastName}")
+    public String personPut(@PathVariable String firstName, @PathVariable String lastName) {
+        personServices.
         return "person";
     }
 
