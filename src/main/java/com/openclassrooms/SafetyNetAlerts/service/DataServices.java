@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -51,13 +52,10 @@ public class DataServices {
         jo = (JSONObject) obj;
         gson = new Gson();
 
-        listPersons = (List<JSONObject>) jo.get("persons");
-        listMedicalRecords = (List<JSONObject>) jo.get("medicalrecords");
-        listFireStations = (List<JSONObject>) jo.get("firestations");
+        listPersons2 = ((List<JSONObject>) jo.get("persons")).stream().map(item -> gson.fromJson(item.toString(), Person.class)).collect(Collectors.toList());;
+        listMedicalRecords2 = ((List<JSONObject>) jo.get("medicalrecords")).stream().map(item -> gson.fromJson(item.toString(), MedicalRecord.class)).collect(Collectors.toList());
+        listFireStations2 = ((List<JSONObject>) jo.get("firestations")).stream().map(item -> gson.fromJson(item.toString(), FireStation.class)).collect(Collectors.toList());
 
-        listPersons2 = listPersons.stream().map(item -> gson.fromJson(item.toString(), Person.class)).collect(Collectors.toList());
-        listMedicalRecords2 = listMedicalRecords.stream().map(item -> gson.fromJson(item.toString(), MedicalRecord.class)).collect(Collectors.toList());
-        listFireStations2 = listFireStations.stream().map(item -> gson.fromJson(item.toString(), FireStation.class)).collect(Collectors.toList());
 
         for (int i = 0; i < listPersons2.size(); i++) {
             for (int j = 0; j < listMedicalRecords2.size(); j++) {
@@ -131,7 +129,7 @@ public class DataServices {
         person.setPhoneNumber(phone);
         person.setEmail(email);
         listPersons2.add(person);
-        jo.put("person",person);
+        //jo.put("person",person);
         updateJsonFile();
     }
 
@@ -146,10 +144,13 @@ public class DataServices {
         }
         listPersons2.remove(person);
         listMedicalRecords2.remove(person.getMedicalHistory());
-        jo.remove(person);
+        //jo.remove(person);
 
         updateJsonFile();
 
+    }
+
+    public void updateJsonFile(){
         /*JSONArray listPersonJson = new JSONArray();
         JSONArray listFirestationJson = new JSONArray();
         JSONArray listMedicalRecordJson = new JSONArray();
@@ -182,20 +183,92 @@ public class DataServices {
         }
 
         try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
-            file.write("{\n" + "    \"persons\": " + listPersonJson.toJSONString() + "\n\",firestations\": " + listFirestationJson + "\n\",medicalrecords\": " + listMedicalRecordJson + "}");
+            //file.write("{\n" + "    \"persons\": " + listPersonJson.toJSONString() + ",\n\"firestations\": " + listFirestationJson + ",\n\"medicalrecords\": " + listMedicalRecordJson + "}");
+            HashMap<String,String> m = new HashMap();
+            m.put("persons",listPersonJson.toString());
+            m.put("firestations",listFirestationJson.toString());
+            m.put("medicalrecords",listMedicalRecordJson.toString());
+            file.write(String.valueOf(m));
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
-
-    }
-
-    public void updateJsonFile(){
-        try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
+        }/*
+        /*try (FileWriter file = new FileWriter("C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data2.json")) {
             file.write(String.valueOf(jo));
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+    }
+
+
+    public void addFireStation(String address, int station) {
+        FireStation fireStation = new FireStation();
+        fireStation.setAddress(address);
+        fireStation.setStation(station);
+        listFireStations2.add(fireStation);
+        updateJsonFile();
+    }
+
+    public void deleteFireStation(String address, int station) {
+        FireStation fireStation = null;
+        for(int i = 0;i < listFireStations2.size();i++) {
+            if( (listFireStations2.get(i).getAddress().equals(address)) && (listFireStations2.get(i).getStation() == station) ) {
+                fireStation = listFireStations2.get(i);
+            }
         }
+        listFireStations2.remove(fireStation);
+        updateJsonFile();
+    }
+
+    public void updateFireStation(String address, int station) {
+        FireStation fireStation = new FireStation();
+        for(int i = 0;i < listFireStations2.size();i++){
+            if(listFireStations2.get(i).getAddress().toUpperCase().equals(address.toUpperCase())){
+                fireStation = listFireStations2.get(i);
+            }
+        }
+        listFireStations2.remove(fireStation);
+        fireStation.setStation(station);
+        listFireStations2.add(fireStation);
+        updateJsonFile();
+    }
+
+
+    public void addMedicalRecord(String firstName, String lastName,String birthDate,List<String> medications,List<String> allergies) {
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setFirstName(firstName);
+        medicalRecord.setLastName(lastName);
+        medicalRecord.setBirthDate(birthDate);
+        medicalRecord.setMedications(medications);
+        medicalRecord.setMedications(allergies);
+        listMedicalRecords2.add(medicalRecord);
+        updateJsonFile();
+    }
+
+    public void deleteMedicalRecord(String firstName, String lastName) {
+        MedicalRecord medicalRecord = null;
+        for(int i = 0;i < listMedicalRecords2.size();i++) {
+            if( (listMedicalRecords2.get(i).getFirstName().toUpperCase().equals(firstName.toUpperCase())) && (listMedicalRecords2.get(i).getLastName().toUpperCase().equals(lastName.toUpperCase())) ) {
+                medicalRecord = listMedicalRecords2.get(i);
+            }
+        }
+        listFireStations2.remove(medicalRecord);
+        updateJsonFile();
+    }
+
+    public void updateMedicalRecord(String firstName, String lastName,String birthDate,List<String> medications,List<String> allergies) {
+        MedicalRecord medicalRecord = new MedicalRecord();
+        for(int i = 0;i < listFireStations2.size();i++){
+            if( (listMedicalRecords2.get(i).getFirstName().toUpperCase().equals(firstName.toUpperCase())) && (listMedicalRecords2.get(i).getLastName().toUpperCase().equals(lastName.toUpperCase()))){
+                medicalRecord = listMedicalRecords2.get(i);
+            }
+        }
+        listMedicalRecords2.remove(medicalRecord);
+        medicalRecord.setBirthDate(birthDate);
+        medicalRecord.setMedications(medications);
+        medicalRecord.setAllergies(allergies);
+        listMedicalRecords2.add(medicalRecord);
+        updateJsonFile();
     }
 }

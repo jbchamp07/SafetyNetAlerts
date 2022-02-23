@@ -1,50 +1,37 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
-import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import com.openclassrooms.SafetyNetAlerts.service.DataServices;
+import com.openclassrooms.SafetyNetAlerts.service.FireStationServices;
+import com.openclassrooms.SafetyNetAlerts.service.MedicalRecordServices;
 import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class MainController {
 
     final DataServices dataServices;
     final PersonServices personServices;
+    final FireStationServices fireStationServices;
+    final MedicalRecordServices medicalRecordServices;
 
-    public MainController(DataServices dataServices, PersonServices personServices) {
+    public MainController(DataServices dataServices, PersonServices personServices, FireStationServices fireStationServices, MedicalRecordServices medicalRecordServices) {
         this.dataServices = dataServices;
         this.personServices = personServices;
+        this.fireStationServices = fireStationServices;
+        this.medicalRecordServices = medicalRecordServices;
     }
 
     //CRUD person
     @GetMapping("/person")
     public String person() {
+        medicalRecordServices.deleteAmedicalRecord("John","Boyd");
         return "person";
     }
-    @PostMapping("/person/{firstName}/{lastName}")
-    public String personPost(@PathVariable String firstName, @PathVariable String lastName) {
-        personServices.addAPerson("a","b","c","d",1,"e","f");
-        return "person";
-    }
-    @DeleteMapping("/person/{firstName}/{lastName}")
-    public String personDelete(@PathVariable String firstName, @PathVariable String lastName) {
-        personServices.findAPerson("John","Boyd");
-        return "person";
-    }
-    @PutMapping("/person/{firstName}/{lastName}")
-    public String personPut(@PathVariable String firstName, @PathVariable String lastName) {
-        personServices.updateAPerson("a","b","c","d",1,"e","f");
-        return "person";
-    }
+
 
     //CRUD fireStation
     //return list person who has stationNumber1
@@ -53,29 +40,30 @@ public class MainController {
         return personServices.findPersonByFireStation(stationNumber);
     }
 
+
     //CRUD medicalRecord
     @GetMapping("/medicalRecord")
     public String medicalRecord() {
         return "medicalRecord";
     }
 
+
+
     //return list kids(18 or less) of an address
     @GetMapping("/childAlert")
-    public String childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
-        model.addAttribute("address", address);
+    public String childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
         return "childAlert";
     }
 
     //return list phone of firestationNumber
     @GetMapping("/phoneAlert")
     public List<String> phoneAlert(@RequestParam(name="firestation", required = false, defaultValue = "None")int firestationNumber) {
-
         return personServices.findPhoneByFireStation(firestationNumber);
     }
 
     //return list person of an address
     @GetMapping("/fire")
-    public List<Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address, Model model) {
+    public List<Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
         return personServices.findPersonByAddress(address);
     }
 
