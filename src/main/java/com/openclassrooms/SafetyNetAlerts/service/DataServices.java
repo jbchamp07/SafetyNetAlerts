@@ -99,38 +99,21 @@ public class DataServices {
         return listEmail;
     }
 
-    public void updatePerson(String firstName, String lastName,String address,String city, int zip, String phone, String email) {
-        Person person = new Person();
+    public void updatePerson(Person person) {
+        Person oldPerson = new Person();
         for(int i = 0;i < listPersons2.size();i++){
-            if(listPersons2.get(i).getFirstName().toUpperCase().equals(firstName.toUpperCase())){
-                if(listPersons2.get(i).getLastName().toUpperCase().equals(lastName.toUpperCase())){
-                    person = listPersons2.get(i);
+            if(listPersons2.get(i).getFirstName().toUpperCase().equals(person.getFirstName().toUpperCase())){
+                if(listPersons2.get(i).getLastName().toUpperCase().equals(person.getLastName().toUpperCase())){
+                    oldPerson = listPersons2.get(i);
                 }
             }
         }
-        listPersons2.remove(person);
-        person.setAddress(address);
-        person.setCity(city);
-        person.setZip(zip);
-        person.setPhoneNumber(phone);
-        person.setEmail(email);
+        listPersons2.remove(oldPerson);
         listPersons2.add(person);
-        updateJsonFile();
-
     }
 
-    public void addPerson(String firstName, String lastName,String address,String city, int zip, String phone, String email){
-        Person person = new Person();
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        person.setAddress(address);
-        person.setCity(city);
-        person.setZip(zip);
-        person.setPhoneNumber(phone);
-        person.setEmail(email);
+    public void addPerson(Person person){
         listPersons2.add(person);
-        //jo.put("person",person);
-        updateJsonFile();
     }
 
     public void deletePerson(String firstName, String lastName) {
@@ -144,9 +127,6 @@ public class DataServices {
         }
         listPersons2.remove(person);
         listMedicalRecords2.remove(person.getMedicalHistory());
-        //jo.remove(person);
-
-        updateJsonFile();
 
     }
 
@@ -202,48 +182,35 @@ public class DataServices {
     }
 
 
-    public void addFireStation(String address, int station) {
-        FireStation fireStation = new FireStation();
-        fireStation.setAddress(address);
-        fireStation.setStation(station);
+
+    public void addFireStation(FireStation fireStation) {
         listFireStations2.add(fireStation);
-        updateJsonFile();
     }
 
-    public void deleteFireStation(String address, int station) {
-        FireStation fireStation = null;
+    public void deleteFireStation(FireStation fireStation) {
+        /*fireStation fireStation = null;
         for(int i = 0;i < listFireStations2.size();i++) {
-            if( (listFireStations2.get(i).getAddress().equals(address)) && (listFireStations2.get(i).getStation() == station) ) {
+            if( (listFireStations2.get(i).getAddress().equals(fireStation.getAddress())) && (listFireStations2.get(i).getStation() == fireStation.getStation()) ) {
                 fireStation = listFireStations2.get(i);
             }
-        }
+        }*/
         listFireStations2.remove(fireStation);
-        updateJsonFile();
     }
 
-    public void updateFireStation(String address, int station) {
-        FireStation fireStation = new FireStation();
+    public void updateFireStation(FireStation fireStation) {
+        FireStation oldFireStation = new FireStation();
         for(int i = 0;i < listFireStations2.size();i++){
-            if(listFireStations2.get(i).getAddress().toUpperCase().equals(address.toUpperCase())){
-                fireStation = listFireStations2.get(i);
+            if(listFireStations2.get(i).getAddress().toUpperCase().equals(fireStation.getAddress().toUpperCase())){
+                oldFireStation = listFireStations2.get(i);
             }
         }
-        listFireStations2.remove(fireStation);
-        fireStation.setStation(station);
+        listFireStations2.remove(oldFireStation);
         listFireStations2.add(fireStation);
-        updateJsonFile();
     }
 
 
-    public void addMedicalRecord(String firstName, String lastName,String birthDate,List<String> medications,List<String> allergies) {
-        MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setFirstName(firstName);
-        medicalRecord.setLastName(lastName);
-        medicalRecord.setBirthDate(birthDate);
-        medicalRecord.setMedications(medications);
-        medicalRecord.setMedications(allergies);
+    public void addMedicalRecord(MedicalRecord medicalRecord) {
         listMedicalRecords2.add(medicalRecord);
-        updateJsonFile();
     }
 
     public void deleteMedicalRecord(String firstName, String lastName) {
@@ -254,21 +221,16 @@ public class DataServices {
             }
         }
         listFireStations2.remove(medicalRecord);
-        updateJsonFile();
     }
 
-    public void updateMedicalRecord(String firstName, String lastName,String birthDate,List<String> medications,List<String> allergies) {
-        MedicalRecord medicalRecord = new MedicalRecord();
+    public void updateMedicalRecord(MedicalRecord medicalRecord) {
+        MedicalRecord oldMedicalRecord = new MedicalRecord();
         for(int i = 0;i < listFireStations2.size();i++){
-            if( (listMedicalRecords2.get(i).getFirstName().toUpperCase().equals(firstName.toUpperCase())) && (listMedicalRecords2.get(i).getLastName().toUpperCase().equals(lastName.toUpperCase()))){
-                medicalRecord = listMedicalRecords2.get(i);
+            if( (listMedicalRecords2.get(i).getFirstName().toUpperCase().equals(medicalRecord.getFirstName().toUpperCase())) && (listMedicalRecords2.get(i).getLastName().toUpperCase().equals(medicalRecord.getLastName().toUpperCase()))){
+                oldMedicalRecord = listMedicalRecords2.get(i);
             }
         }
-        listMedicalRecords2.remove(medicalRecord);
-        medicalRecord.setBirthDate(birthDate);
-        medicalRecord.setMedications(medications);
-        medicalRecord.setAllergies(allergies);
+        listMedicalRecords2.remove(oldMedicalRecord);
         listMedicalRecords2.add(medicalRecord);
-        updateJsonFile();
     }
 }

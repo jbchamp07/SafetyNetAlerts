@@ -28,7 +28,6 @@ public class MainController {
     //CRUD person
     @GetMapping("/person")
     public String person() {
-        medicalRecordServices.deleteAmedicalRecord("John","Boyd");
         return "person";
     }
 

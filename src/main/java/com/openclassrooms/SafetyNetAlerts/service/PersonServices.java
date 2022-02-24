@@ -45,12 +45,12 @@ public class PersonServices {
         dataServices.deletePerson(firstName,lastName);
     }
 
-    public void addAPerson(String firstName,String lastName,String address,String city, int zip, String phone, String email){
-        dataServices.addPerson(firstName,lastName,address,city,zip,phone,email);
+    public void addAPerson(Person person){
+        dataServices.addPerson(person);
     }
 
-    public void updateAPerson(String firstName,String lastName,String address,String city, int zip, String phone, String email){
-        dataServices.updatePerson(firstName,lastName,address,city,zip,phone,email);
+    public void updateAPerson(Person person){
+        dataServices.updatePerson(person);
     }
 
 }

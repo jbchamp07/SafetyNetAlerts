@@ -1,5 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.model.Person;
 import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,19 +14,19 @@ public class PersonController {
     }
 
     @PostMapping("/person")
-    public String personPost(@RequestBody String firstName, @RequestParam String lastName, @RequestParam String address, @RequestParam String city, @RequestParam int zip, @RequestParam String phone, @RequestParam String email) {
-        personServices.addAPerson(firstName,lastName,address,city,zip,phone,email);
+    public String personPost(Person person) {
+        personServices.addAPerson(person);
         return "person added";
     }
-    @DeleteMapping("/person/{firstName}/{lastName}")
-    public String personDelete(@PathVariable String firstName, @PathVariable String lastName) {
+    @DeleteMapping("/person")
+    public String personDelete(@RequestParam String firstName, @RequestParam String lastName) {
         personServices.findAPerson(firstName,lastName);
         return firstName + " " + lastName + " deleted";
     }
-    @PutMapping("/person/{firstName}/{lastName}/{address}/{city}/{zip}/{phone}/{email}")
-    public String personPut(@PathVariable String firstName, @PathVariable String lastName, @PathVariable String address, @PathVariable String city, @PathVariable int zip, @PathVariable String phone, @PathVariable String email) {
-        personServices.updateAPerson(firstName,lastName,address,city,zip,phone,email);
-        return firstName + " " + lastName + " updated";
+    @PutMapping("/person")
+    public String personPut(Person person) {
+        personServices.updateAPerson(person);
+        return person.getFirstName() + " " + person.getLastName() + " updated";
     }
 
 }

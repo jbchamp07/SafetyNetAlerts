@@ -1,11 +1,10 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.service.FireStationServices;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
 public class FireStationController {
 
     final FireStationServices fireStationServices;
@@ -14,20 +13,20 @@ public class FireStationController {
         this.fireStationServices = fireStationServices;
     }
 
-    @PostMapping("/firestation/{address}/{station}")
-    public String fireStationPost(@PathVariable String address, @PathVariable int station) {
-        fireStationServices.addAFireStation(address,station);
+    @PostMapping("/firestation")
+    public String fireStationPost(FireStation fireStation) {
+        fireStationServices.addAFireStation(fireStation);
         return "fireStation added";
     }
-    @DeleteMapping("/firestation/{address}/{station}")
-    public String fireStationDelete(@PathVariable String address, @PathVariable int station) {
-        fireStationServices.deleteAFireStation(address,station);
-        return address + " " + station + " deleted";
+    @DeleteMapping("/firestation")
+    public String fireStationDelete(FireStation fireStation) {
+        fireStationServices.deleteAFireStation(fireStation);
+        return fireStation.getAddress() + " " + fireStation.getStation() + " deleted";
     }
-    @PutMapping("/firestation/{address}/{station}")
-    public String fireStationPut(@PathVariable String address, @PathVariable int station) {
-        fireStationServices.updateAFireStation(address,station);
-        return address + " " + station + " updated";
+    @PutMapping("/firestation")
+    public String fireStationPut(FireStation fireStation) {
+        fireStationServices.updateAFireStation(fireStation);
+        return fireStation.getAddress() + " " + fireStation.getStation() + " updated";
     }
 
 }
