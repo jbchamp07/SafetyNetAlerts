@@ -63,6 +63,7 @@ public class DataServices implements IDataServices{
     }
 
     private String fireStationAddress;
+    //A REVOIR
     @Override
     public List<Person> listPersonOfAFireStation(int stationNumber) {
         for (int i = 0;i < listFireStations2.size();i++) {
@@ -78,7 +79,11 @@ public class DataServices implements IDataServices{
         listPersonOfAFireStation = listPersonOfAFireStation(stationNumber);
         List<String> listPhone = new ArrayList<>();
         for(int i = 0;i < listPersonOfAFireStation.size();i++){
-            listPhone.add(listPersonOfAFireStation.get(i).getPhoneNumber());
+            if(listPhone.contains(listPersonOfAFireStation.get(i).getPhoneNumber())){
+
+            }else{
+                listPhone.add(listPersonOfAFireStation.get(i).getPhoneNumber());
+            }
         }
         return listPhone;
     }
@@ -87,7 +92,11 @@ public class DataServices implements IDataServices{
         List<String> listEmail = new ArrayList<>();
         for(int i = 0;i < listPersons2.size();i++){
             if(listPersons2.get(i).getCity().toUpperCase().equals(city.toUpperCase())){
-                listEmail.add(listPersons2.get(i).getEmail());
+                if(listEmail.contains(listPersons2.get(i).getEmail())){
+
+                }else{
+                    listEmail.add(listPersons2.get(i).getEmail());
+                }
             }
         }
         return listEmail;
@@ -214,7 +223,7 @@ public class DataServices implements IDataServices{
                 medicalRecord = listMedicalRecords2.get(i);
             }
         }
-        listFireStations2.remove(medicalRecord);
+        listMedicalRecords2.remove(medicalRecord);
     }
     @Override
     public void updateMedicalRecord(MedicalRecord medicalRecord) {
