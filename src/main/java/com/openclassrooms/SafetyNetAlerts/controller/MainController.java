@@ -25,14 +25,8 @@ public class MainController {
         this.medicalRecordServices = medicalRecordServices;
     }
 
-    //CRUD person
-    @GetMapping("/person")
-    public String person() {
-        return "person";
-    }
 
 
-    //CRUD fireStation
     //return list person who has stationNumber1
     @GetMapping("/firestation")
     public List<Person> firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
@@ -40,18 +34,12 @@ public class MainController {
     }
 
 
-    //CRUD medicalRecord
-    @GetMapping("/medicalRecord")
-    public String medicalRecord() {
-        return "medicalRecord";
-    }
-
 
 
     //return list kids(18 or less) of an address
     @GetMapping("/childAlert")
-    public String childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
-        return "childAlert";
+    public List<Person> childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
+        return personServices.kidsOfAHouse(address);
     }
 
     //return list phone of firestationNumber
@@ -68,15 +56,15 @@ public class MainController {
 
     //return list houses classed by address
     @GetMapping("/flood/stations")
-    public String listStations(@RequestParam(name="listStations", required = false, defaultValue = "None")List listStations, Model model) {
-        model.addAttribute("listStations", listStations);
-        return "stations";
+    public List<Person> listStations(@RequestParam List listStations) {
+        return personServices.personsFromFireStations(listStations);
     }
 
     //return person informations
     @GetMapping("/personInfo")
-    public List<Person> personInfo(@RequestParam(name="person", required = false, defaultValue = "None")String firstName,@RequestParam(name="person", required = false, defaultValue = "None")String lastName, Model model) {
-        return personServices.allPersons();
+    public List<Person> personInfo(@RequestParam String firstName, @RequestParam String lastName) {
+        return  personServices.aPerson(firstName,lastName);
+        //return personServices.allPersons();
     }
 
     //return list of all email of a city

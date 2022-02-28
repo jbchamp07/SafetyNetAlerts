@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class MedicalRecordServices {
 
-    private final DataServices dataServices;
+    private final IDataServices dataServices;
 
     public MedicalRecordServices(DataServices dataServices) {
         this.dataServices = dataServices;

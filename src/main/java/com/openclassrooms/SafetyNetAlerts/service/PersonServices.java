@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @Service
 public class PersonServices {
 
-    private final DataServices dataServices;
+    private final IDataServices dataServices;
 
     public PersonServices(DataServices dataServices) {
         this.dataServices = dataServices;
@@ -53,4 +53,15 @@ public class PersonServices {
         dataServices.updatePerson(person);
     }
 
+    public List<Person> kidsOfAHouse(String address){
+        return dataServices.kidsOfAHouse(address);
+    }
+
+    public List<Person> aPerson(String firstName, String lastName) {
+        return dataServices.aPerson(firstName,lastName);
+    }
+
+    public List<Person> personsFromFireStations(List listStations) {
+        return  dataServices.personsFromFireStations(listStations);
+    }
 }

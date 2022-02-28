@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class FireStationServices {
 
-    private final DataServices dataServices;
+    private final IDataServices dataServices;
 
     public FireStationServices(DataServices dataServices) {
         this.dataServices = dataServices;

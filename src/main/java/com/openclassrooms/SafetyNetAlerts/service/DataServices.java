@@ -1,36 +1,29 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import lombok.Data;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
 @Service
 @Slf4j
-public class DataServices {
+public class DataServices implements IDataServices{
 
     private List<JSONObject> listPersons;
     private List<JSONObject> listMedicalRecords;
@@ -70,6 +63,7 @@ public class DataServices {
     }
 
     private String fireStationAddress;
+    @Override
     public List<Person> listPersonOfAFireStation(int stationNumber) {
         for (int i = 0;i < listFireStations2.size();i++) {
             if(listFireStations2.get(i).getStation() == stationNumber){
@@ -79,7 +73,7 @@ public class DataServices {
         listPersonOfAFireStation = listPersons2.stream().filter(item -> item.getAddress().toUpperCase().equals(fireStationAddress.toUpperCase())).collect(Collectors.toList());
         return listPersonOfAFireStation;
     }
-
+    @Override
     public List<String> listPhoneOfAFireStation(int stationNumber) {
         listPersonOfAFireStation = listPersonOfAFireStation(stationNumber);
         List<String> listPhone = new ArrayList<>();
@@ -88,7 +82,7 @@ public class DataServices {
         }
         return listPhone;
     }
-
+    @Override
     public List<String> listEmailOfACity(String city) {
         List<String> listEmail = new ArrayList<>();
         for(int i = 0;i < listPersons2.size();i++){
@@ -98,7 +92,7 @@ public class DataServices {
         }
         return listEmail;
     }
-
+    @Override
     public void updatePerson(Person person) {
         Person oldPerson = new Person();
         for(int i = 0;i < listPersons2.size();i++){
@@ -111,11 +105,11 @@ public class DataServices {
         listPersons2.remove(oldPerson);
         listPersons2.add(person);
     }
-
+    @Override
     public void addPerson(Person person){
         listPersons2.add(person);
     }
-
+    @Override
     public void deletePerson(String firstName, String lastName) {
         Person person = null;
         //person = listPersons2.stream().filter(item -> item.getFirstName().toUpperCase().equals(firstName.toUpperCase())).findFirst().get();
@@ -182,11 +176,11 @@ public class DataServices {
     }
 
 
-
+    @Override
     public void addFireStation(FireStation fireStation) {
         listFireStations2.add(fireStation);
     }
-
+    @Override
     public void deleteFireStation(FireStation fireStation) {
         /*fireStation fireStation = null;
         for(int i = 0;i < listFireStations2.size();i++) {
@@ -196,7 +190,7 @@ public class DataServices {
         }*/
         listFireStations2.remove(fireStation);
     }
-
+    @Override
     public void updateFireStation(FireStation fireStation) {
         FireStation oldFireStation = new FireStation();
         for(int i = 0;i < listFireStations2.size();i++){
@@ -208,11 +202,11 @@ public class DataServices {
         listFireStations2.add(fireStation);
     }
 
-
+    @Override
     public void addMedicalRecord(MedicalRecord medicalRecord) {
         listMedicalRecords2.add(medicalRecord);
     }
-
+    @Override
     public void deleteMedicalRecord(String firstName, String lastName) {
         MedicalRecord medicalRecord = null;
         for(int i = 0;i < listMedicalRecords2.size();i++) {
@@ -222,7 +216,7 @@ public class DataServices {
         }
         listFireStations2.remove(medicalRecord);
     }
-
+    @Override
     public void updateMedicalRecord(MedicalRecord medicalRecord) {
         MedicalRecord oldMedicalRecord = new MedicalRecord();
         for(int i = 0;i < listFireStations2.size();i++){
@@ -233,4 +227,83 @@ public class DataServices {
         listMedicalRecords2.remove(oldMedicalRecord);
         listMedicalRecords2.add(medicalRecord);
     }
+    @Override
+    public List<Person> getListPersons2(){
+        return listPersons2;
+    }
+    //A REVOIR
+    @Override
+    public List<Person> kidsOfAHouse(String address){
+        List<Person> listAdultOfAHouse = new ArrayList<>();
+        List<Person> listKidsOfAHouse = new ArrayList<>();
+        for(int i = 0;i < listPersons2.size();i++){
+            if(listPersons2.get(i).getAddress().equals(address)){
+                listAdultOfAHouse.add(listPersons2.get(i));
+            }
+        }
+        /*
+        HashMap<String,List<Person>> map = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate localDate = null;
+        Period period = null;
+        for(int i = 0;i < listAdultOfAHouse.size();i++){
+            localDate.parse(listAdultOfAHouse.get(i).getMedicalHistory().getBirthdate(), formatter);
+            period = Period.between(localDate, LocalDate.now());
+            if(period.getYears() <= 18){
+                listKidsOfAHouse.add(listAdultOfAHouse.get(i));
+                listAdultOfAHouse.remove(listAdultOfAHouse.get(i));
+            }
+        }
+
+        map.put("kids",listKidsOfAHouse);
+        map.put("adults",listAdultOfAHouse);
+        String mapAsString = map.keySet().stream()
+                .map(key -> key + "=" + map.get(key).stream().collect(Collectors.toList()))
+                .collect(Collectors.joining(", ", "{", "}"));
+        */
+        String s;
+        int index;
+        for(int i = 0;i < listAdultOfAHouse.size();i++){
+            index = listAdultOfAHouse.get(i).getMedicalHistory().getBirthdate().lastIndexOf("/");
+            s = listAdultOfAHouse.get(i).getMedicalHistory().getBirthdate().substring(index + 1);
+            if( (2022 -  Integer.valueOf(s)) <= 18){
+                listKidsOfAHouse.add(listAdultOfAHouse.get(i));
+            }
+        }
+
+        listAdultOfAHouse.removeAll(listKidsOfAHouse);
+
+        List<List<Person>> les2Listes = new ArrayList<>();
+        les2Listes.add(listKidsOfAHouse);
+        les2Listes.add(listAdultOfAHouse);
+        return listKidsOfAHouse;
+    }
+    @Override
+    public List<Person> aPerson(String firstName, String lastName){
+        return listPersons2.stream().filter(item -> item.getFirstName().toUpperCase().equals(firstName.toUpperCase())).filter(item -> item.getLastName().toUpperCase().equals(lastName.toUpperCase())).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Person> personsFromFireStations(List listStations){
+        List<FireStation> listStationDeserved = new ArrayList<>();
+        List<Person> listPersonDeserved = new ArrayList<>();
+
+        for (int i = 0;i < listStations.size();i++) {
+            for (int j = 0;j < listFireStations2.size();j++) {
+                if(listFireStations2.get(j).getStation() == Integer.parseInt(listStations.get(i).toString())){
+                    listStationDeserved.add(listFireStations2.get(j));
+                }
+            }
+        }
+        for (int i = 0;i < listPersons2.size();i++){
+            for (int j = 0;j < listStationDeserved.size();j++) {
+                if(listPersons2.get(i).getAddress().toUpperCase().equals(listStationDeserved.get(j).getAddress().toUpperCase())){
+                    listPersonDeserved.add(listPersons2.get(i));
+                }
+            }
+        }
+
+        return listPersonDeserved;
+    }
+
 }

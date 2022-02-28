@@ -67,7 +67,7 @@ public class Person {
     public void setPhoneNumber(String phoneNumber) {
         this.phone = phoneNumber;
     }
-    @JsonIgnore
+
     public MedicalRecord getMedicalHistory() {
         return medicalHistory;
     }

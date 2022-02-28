@@ -1,12 +1,15 @@
 package com.openclassrooms.SafetyNetAlerts.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class MedicalRecord {
-
+    @JsonIgnore
     String firstName;
+    @JsonIgnore
     String lastName;
-    String birthDate;
+    String birthdate;
     List<String> medications;
     List<String> allergies;
 
@@ -26,12 +29,12 @@ public class MedicalRecord {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public String getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public List<String> getMedications() {
