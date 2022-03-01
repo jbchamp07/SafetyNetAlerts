@@ -19,6 +19,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @Service
@@ -285,7 +286,12 @@ public class DataServices implements IDataServices{
         List<List<Person>> les2Listes = new ArrayList<>();
         les2Listes.add(listKidsOfAHouse);
         les2Listes.add(listAdultOfAHouse);
-        return listKidsOfAHouse;
+
+        HashMap<String,List<Person>> m = new HashMap();
+        m.put("kids",listKidsOfAHouse);
+        m.put("adults",listAdultOfAHouse);
+
+        return m;
     }
     @Override
     public List<Person> aPerson(String firstName, String lastName){
