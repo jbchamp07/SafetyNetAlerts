@@ -5,13 +5,16 @@ import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public interface IDataServices {
 
 
     List<Person> getListPersons2();
-    List<Person> listPersonOfAFireStation(int stationNumber);
+    List<FireStation> getListFireStations2();
+    List<MedicalRecord> getListMedicalRecords2();
+    HashMap listPersonOfAFireStation(int stationNumber);
     List<String> listPhoneOfAFireStation(int stationNumber);
     List<String> listEmailOfACity(String city);
 
@@ -27,8 +30,9 @@ public interface IDataServices {
     void deleteMedicalRecord(String firstName, String lastName);
     void updateMedicalRecord(MedicalRecord medicalRecord);
 
-    List<Person> kidsOfAHouse(String address);
+    HashMap<String,List<Person>> kidsOfAHouse(String address);
     List<Person> aPerson(String firstName, String lastName);
-
     List<Person> personsFromFireStations(List listStations);
+    HashMap<String,List<Person>> findPersonByAddress(String address);
+
 }

@@ -5,6 +5,7 @@ import com.openclassrooms.SafetyNetAlerts.model.Person;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -20,16 +21,17 @@ public class PersonServices {
         this.dataServices = dataServices;
     }
 
-    public List<Person> findPersonByAddress(String address){
+    public HashMap<String,List<Person>> findPersonByAddress(String address){
         //List<JSONObject> listPersons = dataServices.getListPersons();
-        return dataServices.getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
+        return dataServices.findPersonByAddress(address);
+        //return dataServices.getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
     }
 
     public List<Person> allPersons(){
         return dataServices.getListPersons2().stream().collect(Collectors.toList());
     }
 
-    public List<Person> findPersonByFireStation(int fireStation){
+    public HashMap findPersonByFireStation(int fireStation){
         return dataServices.listPersonOfAFireStation(fireStation);
     }
 
@@ -53,7 +55,7 @@ public class PersonServices {
         dataServices.updatePerson(person);
     }
 
-    public List<Person> kidsOfAHouse(String address){
+    public HashMap<String,List<Person>> kidsOfAHouse(String address){
         return dataServices.kidsOfAHouse(address);
     }
 

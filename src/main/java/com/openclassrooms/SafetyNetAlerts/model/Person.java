@@ -10,6 +10,7 @@ public class Person {
     private String phone;
     private MedicalRecord medicalHistory;
     private String city;
+    @JsonIgnore
     private int zip;
 
     public String getCity() {

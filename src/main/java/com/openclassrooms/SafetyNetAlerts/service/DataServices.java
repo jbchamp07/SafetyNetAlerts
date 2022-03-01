@@ -63,21 +63,54 @@ public class DataServices implements IDataServices{
 
     }
 
-    private String fireStationAddress;
+    //TODO
     //A REVOIR
     @Override
-    public List<Person> listPersonOfAFireStation(int stationNumber) {
+    public HashMap listPersonOfAFireStation(int stationNumber) {
+        listPersonOfAFireStation = new ArrayList<>();
+        List<String> listAddress = new ArrayList<>();
         for (int i = 0;i < listFireStations2.size();i++) {
             if(listFireStations2.get(i).getStation() == stationNumber){
-                fireStationAddress = listFireStations2.get(i).getAddress();
+                if(listAddress.contains(listFireStations2.get(i).getAddress())){
+                }else{
+                    listAddress.add(listFireStations2.get(i).getAddress());
+                }
             }
         }
-        listPersonOfAFireStation = listPersons2.stream().filter(item -> item.getAddress().toUpperCase().equals(fireStationAddress.toUpperCase())).collect(Collectors.toList());
-        return listPersonOfAFireStation;
+        //listPersonOfAFireStation = listPersons2.stream().filter(item -> item.getAddress().toUpperCase().equals(listAddress.stream())).collect(Collectors.toList());
+        for (int i = 0;i < listPersons2.size();i++) {
+            for(int j = 0; j < listAddress.size();j++){
+                if(listPersons2.get(i).getAddress().equals(listAddress.get(j))){
+                    listPersonOfAFireStation.add(listPersons2.get(i));
+                }
+            }
+        }
+
+        String s;
+        int index;
+        int nbKids = 0;
+        int nbAdults = 0;
+        for(int i = 0;i < listPersonOfAFireStation.size();i++){
+            index = listPersonOfAFireStation.get(i).getMedicalHistory().getBirthdate().lastIndexOf("/");
+            s = listPersonOfAFireStation.get(i).getMedicalHistory().getBirthdate().substring(index + 1);
+            if( (2022 -  Integer.valueOf(s)) <= 18){
+                nbKids = nbKids + 1;
+            }
+        }
+        nbAdults = listPersonOfAFireStation.size() - nbKids;
+        HashMap m = new HashMap();
+        m.put("Numbers of kids",nbKids);
+        m.put("Numbers of adults",nbAdults);
+        m.put("persons",listPersonOfAFireStation);
+        return  m;
+        //return listPersonOfAFireStation;
+
     }
     @Override
     public List<String> listPhoneOfAFireStation(int stationNumber) {
-        listPersonOfAFireStation = listPersonOfAFireStation(stationNumber);
+        HashMap m = new HashMap();
+        m = listPersonOfAFireStation(stationNumber);
+        listPersonOfAFireStation = (List<Person>) m.get("persons");
         List<String> listPhone = new ArrayList<>();
         for(int i = 0;i < listPersonOfAFireStation.size();i++){
             if(listPhone.contains(listPersonOfAFireStation.get(i).getPhoneNumber())){
@@ -241,9 +274,17 @@ public class DataServices implements IDataServices{
     public List<Person> getListPersons2(){
         return listPersons2;
     }
+    @Override
+    public List<FireStation> getListFireStations2(){
+        return listFireStations2;
+    }
+    @Override
+    public List<MedicalRecord> getListMedicalRecords2(){
+        return listMedicalRecords2;
+    }
     //A REVOIR
     @Override
-    public List<Person> kidsOfAHouse(String address){
+    public HashMap<String,List<Person>> kidsOfAHouse(String address){
         List<Person> listAdultOfAHouse = new ArrayList<>();
         List<Person> listKidsOfAHouse = new ArrayList<>();
         for(int i = 0;i < listPersons2.size();i++){
@@ -283,10 +324,6 @@ public class DataServices implements IDataServices{
 
         listAdultOfAHouse.removeAll(listKidsOfAHouse);
 
-        List<List<Person>> les2Listes = new ArrayList<>();
-        les2Listes.add(listKidsOfAHouse);
-        les2Listes.add(listAdultOfAHouse);
-
         HashMap<String,List<Person>> m = new HashMap();
         m.put("kids",listKidsOfAHouse);
         m.put("adults",listAdultOfAHouse);
@@ -320,5 +357,21 @@ public class DataServices implements IDataServices{
 
         return listPersonDeserved;
     }
+
+    @Override
+    public HashMap<String,List<Person>> findPersonByAddress(String address){
+        List<Person> listPersonOfAnAddress = new ArrayList<>();
+        FireStation fireStation = new FireStation();
+        for(int i = 0; i < listFireStations2.size();i++){
+            if(listFireStations2.get(i).getAddress().toUpperCase().equals(address.toUpperCase())){
+                fireStation =listFireStations2.get(i);
+            }
+        }
+        listPersonOfAnAddress = getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
+        HashMap<String,List<Person>> m = new HashMap();
+        m.put("station number : " + fireStation.getStation(),listPersonOfAnAddress);
+        return m;
+    }
+
 
 }

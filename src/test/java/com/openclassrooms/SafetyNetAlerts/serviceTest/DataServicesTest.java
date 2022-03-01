@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -24,7 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 @SpringBootTest
 public class DataServicesTest {
 
-    private DataServices dataServices;
+    private IDataServices dataServices;
+    private Person person;
+    private MedicalRecord medicalRecord;
+    private FireStation fireStation;
 
     @Before
     public void init() throws IOException, ParseException {
@@ -36,17 +40,108 @@ public class DataServicesTest {
         dataServices = new DataServices();
     }
 
-    //A FAIRE
-    /*@Test
+    //TODO
+    @Test
     public void listPersonOfAFireStationTest(){
-        List<Person> listPersonOfAFireStation = new ArrayList<>();
-        //listPersonOfAFireStation.add();
-        assertEquals(listPersonOfAFireStation,dataServices.listPersonOfAFireStation(1));
-    }*/
+        /*List<Person> listPersonOfAFireStation = new ArrayList<>();
+        person = new Person();
+        person.setFirstName("Peter");
+        person.setLastName("Duncan");
+        person.setEmail("jaboyd@email.com");
+        person.setPhoneNumber("841-874-6512");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("644 Gershwin Cir");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{"shellfish"}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        person = new Person();
+        person.setFirstName("Reginold");
+        person.setLastName("Walker");
+        person.setEmail("reg@email.com");
+        person.setPhoneNumber("841-874-8547");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("908 73rd St");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{"thradox:700mg"}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{"illisoxian"}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        person = new Person();
+        person.setFirstName("Jamie");
+        person.setLastName("Peters");
+        person.setEmail("jpeter@email.com");
+        person.setPhoneNumber("841-874-7462");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("908 73rd St");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        person = new Person();
+        person.setFirstName("Brian");
+        person.setLastName("Stelzer");
+        person.setEmail("bstel@email.com");
+        person.setPhoneNumber("841-874-7784");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("947 E. Rose Dr");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{"ibupurin:200mg", "hydrapermazol:400mg"}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{"nillacilan"}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        person = new Person();
+        person.setFirstName("Shawna");
+        person.setLastName("Stelzer");
+        person.setEmail("ssanw@email.com");
+        person.setPhoneNumber("841-874-7784");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("947 E. Rose Dr");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        person = new Person();
+        person.setFirstName("Kendrik");
+        person.setLastName("Stelzer");
+        person.setEmail("bstel@email.com");
+        person.setPhoneNumber("841-874-7784");
+        person.setCity("Culver");
+        person.setZip(97451);
+        person.setAddress("947 E. Rose Dr");
+        medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(Arrays.asList(new String[]{"noxidian:100mg", "pharmacol:2500mg"}));
+        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
+        person.setMedicalHistory(medicalRecord);
+        listPersonOfAFireStation.add(person);
+        assertEquals(listPersonOfAFireStation.stream().collect(Collectors.toList()),dataServices.listPersonOfAFireStation(1).stream().collect(Collectors.toList()));
+        */
+        List<Person> list;
+        list = (List<Person>) dataServices.listPersonOfAFireStation(1).get("persons");
+        assertEquals(6,list.size());
+        list = (List<Person>) dataServices.listPersonOfAFireStation(2).get("persons");
+        assertEquals(5,list.size());
+        list = (List<Person>) dataServices.listPersonOfAFireStation(3).get("persons");
+        assertEquals(11,list.size());
+        list = (List<Person>) dataServices.listPersonOfAFireStation(4).get("persons");
+        assertEquals(4,list.size());
+    }
 
+    //TODO
     @Test
     public void listPhoneOfAFireStationTest(){
         List<String> listPhone = new ArrayList<>();
+        listPhone.add("841-874-6512");
+        listPhone.add("841-874-8547");
+        listPhone.add("841-874-7462");
         listPhone.add("841-874-7784");
         assertEquals(listPhone,dataServices.listPhoneOfAFireStation(1));
     }
@@ -80,7 +175,7 @@ public class DataServicesTest {
 
     @Test
     public void updatePersonTest(){
-        Person person = new Person();
+        person = new Person();
         person.setFirstName("Jean-Baptiste");
         person.setLastName("Champetier");
         person.setEmail("jb.champetier@gmail.com");
@@ -96,7 +191,7 @@ public class DataServicesTest {
     }
     @Test
     public void addPersonTest(){
-        Person person = new Person();
+        person = new Person();
         person.setFirstName("Jean-Baptiste");
         person.setLastName("Champetier");
         person.setEmail("jb.champetier@gmail.com");
@@ -116,7 +211,7 @@ public class DataServicesTest {
     }
     @Test
     public void deletePersonTestOk(){
-        Person person = new Person();
+        person = new Person();
         person.setFirstName("Jean-Baptiste");
         person.setLastName("Champetier");
         person.setEmail("jb.champetier@gmail.com");
@@ -131,7 +226,7 @@ public class DataServicesTest {
     }
     @Test
     public void deletePersonTestNotOk(){
-        Person person = new Person();
+        person = new Person();
         person.setFirstName("Jean-Baptiste");
         person.setLastName("Champetier");
         person.setEmail("jb.champetier@gmail.com");
@@ -146,7 +241,7 @@ public class DataServicesTest {
 
     @Test
     public void addFireStationTest(){
-        FireStation fireStation = new FireStation();
+        fireStation = new FireStation();
         fireStation.setStation(10);
         fireStation.setAddress("789 boulevard gambetta");
         dataServices.addFireStation(fireStation);
@@ -155,7 +250,7 @@ public class DataServicesTest {
     }
     @Test
     public void deleteFireStationTestOk(){
-        FireStation fireStation = new FireStation();
+        fireStation = new FireStation();
         fireStation.setStation(10);
         fireStation.setAddress("789 boulevard gambetta");
         dataServices.addFireStation(fireStation);
@@ -164,7 +259,7 @@ public class DataServicesTest {
     }
     @Test
     public void deleteFireStationTestNotOk(){
-        FireStation fireStation = new FireStation();
+        fireStation = new FireStation();
         fireStation.setStation(10);
         fireStation.setAddress("789 boulevard gambetta");
         dataServices.addFireStation(fireStation);
@@ -172,7 +267,7 @@ public class DataServicesTest {
     }
     @Test
     public void updateFireStationTest(){
-        FireStation fireStation = new FireStation();
+        fireStation = new FireStation();
         fireStation.setStation(10);
         fireStation.setAddress("789 boulevard gambetta");
         dataServices.addFireStation(fireStation);
@@ -183,7 +278,7 @@ public class DataServicesTest {
 
     @Test
     public void addMedicalRecordTest(){
-        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord = new MedicalRecord();
         medicalRecord.setFirstName("Jean-Baptiste");
         medicalRecord.setLastName("Champetier");
         medicalRecord.setBirthdate("02/06/2000");
@@ -194,7 +289,7 @@ public class DataServicesTest {
     }
     @Test
     public void deleteMedicalRecordTestOk(){
-        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord = new MedicalRecord();
         medicalRecord.setFirstName("Jean-Baptiste");
         medicalRecord.setLastName("Champetier");
         medicalRecord.setBirthdate("02/06/2000");
@@ -206,7 +301,7 @@ public class DataServicesTest {
     }
     @Test
     public void deleteMedicalRecordTestNotOk(){
-        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord = new MedicalRecord();
         medicalRecord.setFirstName("Jean-Baptiste");
         medicalRecord.setLastName("Champetier");
         medicalRecord.setBirthdate("02/06/2000");
@@ -217,7 +312,7 @@ public class DataServicesTest {
     }
     @Test
     public void updateMedicalRecordTest(){
-        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord = new MedicalRecord();
         medicalRecord.setFirstName("Jean-Baptiste");
         medicalRecord.setLastName("Champetier");
         medicalRecord.setBirthdate("02/06/2000");
@@ -240,7 +335,7 @@ public class DataServicesTest {
         assertEquals("Paris",person.get(0).getCity());
         assertEquals("0610803898",person.get(0).getPhoneNumber());
     }
-    //A FINIR
+    //TODO
     /*@Test
     public void personsFromFireStationsTest(){
         List<Person> listPersonsFromFireStations = new ArrayList<>();

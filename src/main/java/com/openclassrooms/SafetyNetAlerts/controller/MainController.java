@@ -8,6 +8,7 @@ import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class MainController {
     //TODO
     //return list person who has stationNumber1
     @GetMapping("/firestation")
-    public List<Person> firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
+    public HashMap firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
         return personServices.findPersonByFireStation(stationNumber);
     }
 
@@ -38,7 +39,7 @@ public class MainController {
 
     //return list kids(18 or less) of an address
     @GetMapping("/childAlert")
-    public List<Person> childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
+    public HashMap<String,List<Person>> childAlert(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
         return personServices.kidsOfAHouse(address);
     }
 
@@ -48,12 +49,14 @@ public class MainController {
         return personServices.findPhoneByFireStation(firestationNumber);
     }
 
+    //TODO
     //return list person of an address
     @GetMapping("/fire")
-    public List<Person> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
+    public HashMap<String,List<Person>> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
         return personServices.findPersonByAddress(address);
     }
 
+    //TODO
     //return list houses classed by address
     @GetMapping("/flood/stations")
     public List<Person> listStations(@RequestParam List listStations) {
