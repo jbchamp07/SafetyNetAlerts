@@ -1,6 +1,9 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
 import com.google.gson.Gson;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOChildAlert;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFire;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFireStation;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -10,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -39,6 +44,7 @@ public class DataServices implements IDataServices{
     private Object obj;
     private JSONObject jo;
     private Gson gson;
+    private ModelMapper modelMapper;
 
     public DataServices() throws IOException, ParseException {
         parser = new JSONParser();
@@ -101,7 +107,13 @@ public class DataServices implements IDataServices{
         HashMap m = new HashMap();
         m.put("Numbers of kids",nbKids);
         m.put("Numbers of adults",nbAdults);
-        m.put("persons",listPersonOfAFireStation);
+        //m.put("persons",listPersonOfAFireStation);
+        modelMapper = new ModelMapper();
+        List<PersonDTOFireStation> personDTOFireStation = new ArrayList<>();
+        for(int i = 0; i < listPersonOfAFireStation.size();i++){
+            personDTOFireStation.add(modelMapper.map(listPersonOfAFireStation.get(i), PersonDTOFireStation.class));
+        }
+        m.put("persons",personDTOFireStation);
         return  m;
         //return listPersonOfAFireStation;
 
@@ -167,8 +179,8 @@ public class DataServices implements IDataServices{
 
     }
 
-    public void updateJsonFile(){
-        /*JSONArray listPersonJson = new JSONArray();
+    /*public void updateJsonFile(){
+        JSONArray listPersonJson = new JSONArray();
         JSONArray listFirestationJson = new JSONArray();
         JSONArray listMedicalRecordJson = new JSONArray();
         JSONObject jsonObject;
@@ -215,8 +227,8 @@ public class DataServices implements IDataServices{
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
-    }
+        }
+    }*/
 
 
     @Override
@@ -282,7 +294,7 @@ public class DataServices implements IDataServices{
     public List<MedicalRecord> getListMedicalRecords2(){
         return listMedicalRecords2;
     }
-    //A REVOIR
+    //A REVOIR calcul de l'age
     @Override
     public HashMap<String,List<Person>> kidsOfAHouse(String address){
         List<Person> listAdultOfAHouse = new ArrayList<>();
@@ -292,26 +304,6 @@ public class DataServices implements IDataServices{
                 listAdultOfAHouse.add(listPersons2.get(i));
             }
         }
-        /*
-        HashMap<String,List<Person>> map = new HashMap<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        LocalDate localDate = null;
-        Period period = null;
-        for(int i = 0;i < listAdultOfAHouse.size();i++){
-            localDate.parse(listAdultOfAHouse.get(i).getMedicalHistory().getBirthdate(), formatter);
-            period = Period.between(localDate, LocalDate.now());
-            if(period.getYears() <= 18){
-                listKidsOfAHouse.add(listAdultOfAHouse.get(i));
-                listAdultOfAHouse.remove(listAdultOfAHouse.get(i));
-            }
-        }
-
-        map.put("kids",listKidsOfAHouse);
-        map.put("adults",listAdultOfAHouse);
-        String mapAsString = map.keySet().stream()
-                .map(key -> key + "=" + map.get(key).stream().collect(Collectors.toList()))
-                .collect(Collectors.joining(", ", "{", "}"));
-        */
         String s;
         int index;
         for(int i = 0;i < listAdultOfAHouse.size();i++){
@@ -324,9 +316,26 @@ public class DataServices implements IDataServices{
 
         listAdultOfAHouse.removeAll(listKidsOfAHouse);
 
-        HashMap<String,List<Person>> m = new HashMap();
-        m.put("kids",listKidsOfAHouse);
-        m.put("adults",listAdultOfAHouse);
+        HashMap m = new HashMap();
+        //m.put("kids",listKidsOfAHouse);
+        //m.put("adults",listAdultOfAHouse);
+
+        modelMapper = new ModelMapper();
+        List<PersonDTOChildAlert> personDTOChildAlertsKids = new ArrayList<>();
+        List<PersonDTOChildAlert> personDTOChildAlertsAdults = new ArrayList<>();
+        int age;
+        for(int i = 0; i < listKidsOfAHouse.size();i++){
+            personDTOChildAlertsKids.add(modelMapper.map(listKidsOfAHouse.get(i), PersonDTOChildAlert.class));
+            age = (Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(listKidsOfAHouse.get(i).getMedicalHistory().getBirthdate().substring(6)));
+            personDTOChildAlertsKids.get(i).setAge(age);
+        }
+        for(int i = 0; i < listAdultOfAHouse.size();i++){
+            personDTOChildAlertsAdults.add(modelMapper.map(listAdultOfAHouse.get(i), PersonDTOChildAlert.class));
+            age = (Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(listAdultOfAHouse.get(i).getMedicalHistory().getBirthdate().substring(6)));
+            personDTOChildAlertsAdults.get(i).setAge(age);
+        }
+        m.put("kids",personDTOChildAlertsKids);
+        m.put("adults",personDTOChildAlertsAdults);
 
         return m;
     }
@@ -368,8 +377,18 @@ public class DataServices implements IDataServices{
             }
         }
         listPersonOfAnAddress = getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
-        HashMap<String,List<Person>> m = new HashMap();
-        m.put("station number : " + fireStation.getStation(),listPersonOfAnAddress);
+        HashMap m = new HashMap();
+        m.put("stationNumber",fireStation.getStation());
+        //m.put("persons",listPersonOfAnAddress);
+        modelMapper = new ModelMapper();
+        List<PersonDTOFire> personDTOFire = new ArrayList<>();
+        int age;
+        for(int i = 0; i < listPersonOfAnAddress.size();i++){
+            personDTOFire.add(modelMapper.map(listPersonOfAnAddress.get(i), PersonDTOFire.class));
+            age = (Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(listPersonOfAnAddress.get(i).getMedicalHistory().getBirthdate().substring(6)));
+            personDTOFire.get(i).setAge(age);
+        }
+        m.put("persons",personDTOFire);
         return m;
     }
 

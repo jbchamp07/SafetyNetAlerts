@@ -132,7 +132,8 @@ public class DataServicesTest {
         list = (List<Person>) dataServices.listPersonOfAFireStation(3).get("persons");
         assertEquals(11,list.size());
         list = (List<Person>) dataServices.listPersonOfAFireStation(4).get("persons");
-        assertEquals(4,list.size());
+        assertEquals(1,dataServices.listPersonOfAFireStation(4).get("Numbers of kids"));
+        assertEquals(5,dataServices.listPersonOfAFireStation(4).get("Numbers of adults"));
     }
 
     //TODO

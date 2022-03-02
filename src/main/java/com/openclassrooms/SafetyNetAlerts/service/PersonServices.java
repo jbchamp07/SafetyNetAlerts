@@ -27,10 +27,6 @@ public class PersonServices {
         //return dataServices.getListPersons2().stream().filter(item -> item.getAddress().toUpperCase().equals(address.toUpperCase())).collect(Collectors.toList());
     }
 
-    public List<Person> allPersons(){
-        return dataServices.getListPersons2().stream().collect(Collectors.toList());
-    }
-
     public HashMap findPersonByFireStation(int fireStation){
         return dataServices.listPersonOfAFireStation(fireStation);
     }

@@ -9,6 +9,7 @@ public class MedicalRecord {
     String firstName;
     @JsonIgnore
     String lastName;
+    @JsonIgnore
     String birthdate;
     List<String> medications;
     List<String> allergies;

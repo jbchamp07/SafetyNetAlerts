@@ -52,7 +52,7 @@ public class MainController {
     //TODO
     //return list person of an address
     @GetMapping("/fire")
-    public HashMap<String,List<Person>> fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
+    public HashMap fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
         return personServices.findPersonByAddress(address);
     }
 
