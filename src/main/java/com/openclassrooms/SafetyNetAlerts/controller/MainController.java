@@ -1,5 +1,7 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.dto.AddressDTO;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import com.openclassrooms.SafetyNetAlerts.service.DataServices;
 import com.openclassrooms.SafetyNetAlerts.service.FireStationServices;
@@ -59,13 +61,13 @@ public class MainController {
     //TODO
     //return list houses classed by address
     @GetMapping("/flood/stations")
-    public List<Person> listStations(@RequestParam List listStations) {
+    public List<AddressDTO> listStations(@RequestParam List listStations) {
         return personServices.personsFromFireStations(listStations);
     }
 
     //return person informations
     @GetMapping("/personInfo")
-    public List<Person> personInfo(@RequestParam String firstName, @RequestParam String lastName) {
+    public List<PersonDTOPersonInfo> personInfo(@RequestParam String firstName, @RequestParam String lastName) {
         return  personServices.aPerson(firstName,lastName);
         //return personServices.allPersons();
     }

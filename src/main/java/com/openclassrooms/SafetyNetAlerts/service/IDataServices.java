@@ -1,5 +1,7 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
+import com.openclassrooms.SafetyNetAlerts.dto.AddressDTO;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -31,8 +33,8 @@ public interface IDataServices {
     void updateMedicalRecord(MedicalRecord medicalRecord);
 
     HashMap<String,List<Person>> kidsOfAHouse(String address);
-    List<Person> aPerson(String firstName, String lastName);
-    List<Person> personsFromFireStations(List listStations);
+    List<PersonDTOPersonInfo> aPerson(String firstName, String lastName);
+    List<AddressDTO> personsFromFireStations(List listStations);
     HashMap<String,List<Person>> findPersonByAddress(String address);
 
 }

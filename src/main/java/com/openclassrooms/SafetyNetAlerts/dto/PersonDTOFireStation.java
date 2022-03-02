@@ -1,5 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 
 public class PersonDTOFireStation {
@@ -7,6 +8,16 @@ public class PersonDTOFireStation {
     private String firstName;
     private String lastName;
     private String address;
+    @JsonIgnore
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -1,5 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.serviceTest;
 
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -40,90 +41,8 @@ public class DataServicesTest {
         dataServices = new DataServices();
     }
 
-    //TODO
     @Test
     public void listPersonOfAFireStationTest(){
-        /*List<Person> listPersonOfAFireStation = new ArrayList<>();
-        person = new Person();
-        person.setFirstName("Peter");
-        person.setLastName("Duncan");
-        person.setEmail("jaboyd@email.com");
-        person.setPhoneNumber("841-874-6512");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("644 Gershwin Cir");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{"shellfish"}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        person = new Person();
-        person.setFirstName("Reginold");
-        person.setLastName("Walker");
-        person.setEmail("reg@email.com");
-        person.setPhoneNumber("841-874-8547");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("908 73rd St");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{"thradox:700mg"}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{"illisoxian"}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        person = new Person();
-        person.setFirstName("Jamie");
-        person.setLastName("Peters");
-        person.setEmail("jpeter@email.com");
-        person.setPhoneNumber("841-874-7462");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("908 73rd St");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        person = new Person();
-        person.setFirstName("Brian");
-        person.setLastName("Stelzer");
-        person.setEmail("bstel@email.com");
-        person.setPhoneNumber("841-874-7784");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("947 E. Rose Dr");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{"ibupurin:200mg", "hydrapermazol:400mg"}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{"nillacilan"}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        person = new Person();
-        person.setFirstName("Shawna");
-        person.setLastName("Stelzer");
-        person.setEmail("ssanw@email.com");
-        person.setPhoneNumber("841-874-7784");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("947 E. Rose Dr");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        person = new Person();
-        person.setFirstName("Kendrik");
-        person.setLastName("Stelzer");
-        person.setEmail("bstel@email.com");
-        person.setPhoneNumber("841-874-7784");
-        person.setCity("Culver");
-        person.setZip(97451);
-        person.setAddress("947 E. Rose Dr");
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setMedications(Arrays.asList(new String[]{"noxidian:100mg", "pharmacol:2500mg"}));
-        medicalRecord.setAllergies(Arrays.asList(new String[]{}));
-        person.setMedicalHistory(medicalRecord);
-        listPersonOfAFireStation.add(person);
-        assertEquals(listPersonOfAFireStation.stream().collect(Collectors.toList()),dataServices.listPersonOfAFireStation(1).stream().collect(Collectors.toList()));
-        */
         List<Person> list;
         list = (List<Person>) dataServices.listPersonOfAFireStation(1).get("persons");
         assertEquals(6,list.size());
@@ -132,8 +51,8 @@ public class DataServicesTest {
         list = (List<Person>) dataServices.listPersonOfAFireStation(3).get("persons");
         assertEquals(11,list.size());
         list = (List<Person>) dataServices.listPersonOfAFireStation(4).get("persons");
-        assertEquals(1,dataServices.listPersonOfAFireStation(4).get("Numbers of kids"));
-        assertEquals(5,dataServices.listPersonOfAFireStation(4).get("Numbers of adults"));
+        assertEquals(0,dataServices.listPersonOfAFireStation(4).get("Numbers of kids"));
+        assertEquals(4,dataServices.listPersonOfAFireStation(4).get("Numbers of adults"));
     }
 
     //TODO
@@ -332,9 +251,10 @@ public class DataServicesTest {
     @Test
     public void aPersonTest(){
         addPersonTest();
-        List<Person> person = dataServices.aPerson("Jean-Baptiste","Champetier");
-        assertEquals("Paris",person.get(0).getCity());
-        assertEquals("0610803898",person.get(0).getPhoneNumber());
+        addMedicalRecordTest();
+        List<PersonDTOPersonInfo> person = dataServices.aPerson("Jean-Baptiste","Champetier");
+        assertEquals("jb.champetier@gmail.com",person.get(0).getEmail());
+        assertEquals("123 rue lafayette",person.get(0).getAddress());
     }
     //TODO
     /*@Test

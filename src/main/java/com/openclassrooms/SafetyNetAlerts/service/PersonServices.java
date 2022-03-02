@@ -1,6 +1,8 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
 import com.google.gson.Gson;
+import com.openclassrooms.SafetyNetAlerts.dto.AddressDTO;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
@@ -55,11 +57,11 @@ public class PersonServices {
         return dataServices.kidsOfAHouse(address);
     }
 
-    public List<Person> aPerson(String firstName, String lastName) {
+    public List<PersonDTOPersonInfo> aPerson(String firstName, String lastName) {
         return dataServices.aPerson(firstName,lastName);
     }
 
-    public List<Person> personsFromFireStations(List listStations) {
+    public List<AddressDTO> personsFromFireStations(List listStations) {
         return  dataServices.personsFromFireStations(listStations);
     }
 }

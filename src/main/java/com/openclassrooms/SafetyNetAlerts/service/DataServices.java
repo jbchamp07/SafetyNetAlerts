@@ -1,9 +1,7 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
 import com.google.gson.Gson;
-import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOChildAlert;
-import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFire;
-import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFireStation;
+import com.openclassrooms.SafetyNetAlerts.dto.*;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -18,13 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Service
@@ -123,12 +116,19 @@ public class DataServices implements IDataServices{
         HashMap m = new HashMap();
         m = listPersonOfAFireStation(stationNumber);
         listPersonOfAFireStation = (List<Person>) m.get("persons");
+
+        modelMapper = new ModelMapper();
+        List<PersonDTOFireStation> personDTOFireStation = new ArrayList<>();
+        for(int i = 0; i < listPersonOfAFireStation.size();i++){
+            personDTOFireStation.add(modelMapper.map(listPersonOfAFireStation.get(i), PersonDTOFireStation.class));
+        }
+
         List<String> listPhone = new ArrayList<>();
-        for(int i = 0;i < listPersonOfAFireStation.size();i++){
-            if(listPhone.contains(listPersonOfAFireStation.get(i).getPhoneNumber())){
+        for(int i = 0;i < personDTOFireStation.size();i++){
+            if(listPhone.contains(personDTOFireStation.get(i).getPhoneNumber())){
 
             }else{
-                listPhone.add(listPersonOfAFireStation.get(i).getPhoneNumber());
+                listPhone.add(personDTOFireStation.get(i).getPhoneNumber());
             }
         }
         return listPhone;
@@ -260,7 +260,13 @@ public class DataServices implements IDataServices{
     @Override
     public void addMedicalRecord(MedicalRecord medicalRecord) {
         listMedicalRecords2.add(medicalRecord);
+        for (int i = 0; i < listPersons2.size(); i++) {
+            if( (listPersons2.get(i).getFirstName().equals(medicalRecord.getFirstName())) && (listPersons2.get(i).getLastName().equals(medicalRecord.getLastName()))){
+                listPersons2.get(i).setMedicalHistory(medicalRecord);
+            }
+        }
     }
+    //TODO set le medical record de la personne a null
     @Override
     public void deleteMedicalRecord(String firstName, String lastName) {
         MedicalRecord medicalRecord = null;
@@ -271,6 +277,7 @@ public class DataServices implements IDataServices{
         }
         listMedicalRecords2.remove(medicalRecord);
     }
+    //TODO set le medical record de la personne a jours
     @Override
     public void updateMedicalRecord(MedicalRecord medicalRecord) {
         MedicalRecord oldMedicalRecord = new MedicalRecord();
@@ -340,12 +347,21 @@ public class DataServices implements IDataServices{
         return m;
     }
     @Override
-    public List<Person> aPerson(String firstName, String lastName){
-        return listPersons2.stream().filter(item -> item.getFirstName().toUpperCase().equals(firstName.toUpperCase())).filter(item -> item.getLastName().toUpperCase().equals(lastName.toUpperCase())).collect(Collectors.toList());
+    public List<PersonDTOPersonInfo> aPerson(String firstName, String lastName){
+        List<Person> listPerson = listPersons2.stream().filter(item -> item.getFirstName().toUpperCase().equals(firstName.toUpperCase())).filter(item -> item.getLastName().toUpperCase().equals(lastName.toUpperCase())).collect(Collectors.toList());
+        modelMapper = new ModelMapper();
+        List<PersonDTOPersonInfo> personDTOPersonInfo = new ArrayList<>();
+        int age;
+        for(int i = 0; i < listPerson.size();i++){
+            personDTOPersonInfo.add(modelMapper.map(listPerson.get(i), PersonDTOPersonInfo.class));
+            age = (Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(listPerson.get(i).getMedicalHistory().getBirthdate().substring(6)));
+            personDTOPersonInfo.get(i).setAge(age);
+        }
+        return personDTOPersonInfo;
     }
 
     @Override
-    public List<Person> personsFromFireStations(List listStations){
+    public List<AddressDTO> personsFromFireStations(List listStations){
         List<FireStation> listStationDeserved = new ArrayList<>();
         List<Person> listPersonDeserved = new ArrayList<>();
 
@@ -364,7 +380,23 @@ public class DataServices implements IDataServices{
             }
         }
 
-        return listPersonDeserved;
+        modelMapper = new ModelMapper();
+        List<PersonDTOStations> personDTOStations = new ArrayList<>();
+        for(int i = 0; i < listPersonDeserved.size();i++){
+            personDTOStations.add(modelMapper.map(listPersonDeserved.get(i), PersonDTOStations.class));
+        }
+
+        AddressDTO addressDTO;
+        List<AddressDTO> list = new ArrayList<>();
+        for(int i = 0; i < listStationDeserved.size();i++){
+            addressDTO = new AddressDTO();
+            addressDTO.setAddress(listStationDeserved.get(i).getAddress());
+            int j = i;
+            addressDTO.setPersons(personDTOStations.stream().filter(t -> t.getAddress().equals(listStationDeserved.get(j).getAddress())).collect(Collectors.toList()));
+            list.add(addressDTO);
+        }
+
+        return list;
     }
 
     @Override
