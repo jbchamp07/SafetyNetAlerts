@@ -1,6 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.serviceTest;
 
-import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
+import com.openclassrooms.SafetyNetAlerts.dto.*;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -8,7 +8,7 @@ import com.openclassrooms.SafetyNetAlerts.service.DataServices;
 import com.openclassrooms.SafetyNetAlerts.service.IDataServices;
 import org.json.simple.parser.ParseException;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class DataServicesTest {
@@ -262,4 +264,73 @@ public class DataServicesTest {
         List<Person> listPersonsFromFireStations = new ArrayList<>();
         assertEquals(listPersonsFromFireStations,dataServices.personsFromFireStations(Arrays.asList(new String[]{"1", "2"})));
     }*/
+    @Test
+    public void kidsOfAHouseTestOkWithoutKids(){
+        HashMap m = new HashMap();
+        HashMap result = new HashMap();
+        List<PersonDTOChildAlert> personDTOChildAlertsKids = new ArrayList<>();
+        List<PersonDTOChildAlert> personDTOChildAlertsAdults = new ArrayList<>();
+        PersonDTOChildAlert p = new PersonDTOChildAlert();
+        p.setFirstName("Jonanathan");
+        p.setLastName("Marrack");
+        p.setAge(33);
+        personDTOChildAlertsAdults.add(p);
+        m.put("kids",personDTOChildAlertsKids);
+        m.put("adults",personDTOChildAlertsAdults);
+        result = dataServices.kidsOfAHouse("29 15th St");
+        assertEquals(m.size(),result.size());
+    }
+    @Test
+    public void kidsOfAHouseTestOkWithKids(){
+        HashMap m = new HashMap();
+        HashMap result = new HashMap();
+        List<PersonDTOChildAlert> personDTOChildAlertsKids = new ArrayList<>();
+        List<PersonDTOChildAlert> personDTOChildAlertsAdults = new ArrayList<>();
+        PersonDTOChildAlert p = new PersonDTOChildAlert();
+        p.setFirstName("Brian");
+        p.setLastName("Stelzer");
+        p.setAge(45);
+        personDTOChildAlertsAdults.add(p);
+        p = new PersonDTOChildAlert();
+        p.setFirstName("Shawna");
+        p.setLastName("Stelzer");
+        p.setAge(40);
+        personDTOChildAlertsAdults.add(p);
+        p = new PersonDTOChildAlert();
+        p.setFirstName("Kendrik");
+        p.setLastName("Stelzer");
+        p.setAge(8);
+        personDTOChildAlertsKids.add(p);
+        m.put("kids",personDTOChildAlertsKids);
+        m.put("adults",personDTOChildAlertsAdults);
+        result = dataServices.kidsOfAHouse("947 E. Rose Dr");
+        assertEquals(m.size(),result.size());
+    }
+    @Test
+    public void kidsOfAHouseTestNotOk(){
+        HashMap m = new HashMap();
+        List<PersonDTOChildAlert> personDTOChildAlertsKids = new ArrayList<>();
+        List<PersonDTOChildAlert> personDTOChildAlertsAdults = new ArrayList<>();
+        m.put("kids",personDTOChildAlertsKids);
+        m.put("adults",personDTOChildAlertsAdults);
+        assertEquals(m,dataServices.kidsOfAHouse("ad"));
+    }
+    @Test
+    public void personsFromFireStationsTest(){
+        List listStation = new ArrayList();
+        listStation.add(1);
+        List<AddressDTO> list = dataServices.personsFromFireStations(listStation);
+        assertEquals(3,list.size());
+    }
+    @Test
+    public void findPersonByAddressTest(){
+        HashMap m = new HashMap();
+        m = dataServices.findPersonByAddress("29 15th St");
+        assertEquals(2,m.size());
+        assertEquals(true,m.containsKey("stationNumber"));
+        assertEquals(true,m.containsKey("persons"));
+        List<PersonDTOFire> list = (List<PersonDTOFire>) m.get("persons");
+        assertEquals("Marrack",list.get(0).getLastName());
+
+    }
 }

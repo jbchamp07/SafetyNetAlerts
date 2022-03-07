@@ -1,31 +1,24 @@
 package com.openclassrooms.SafetyNetAlerts.controllerTest;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.openclassrooms.SafetyNetAlerts.controller.MainController;
 import com.openclassrooms.SafetyNetAlerts.dto.AddressDTO;
 import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFire;
 import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOFireStation;
 import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
-import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,7 +35,8 @@ public class MainControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PersonServices personServices;
-
+    private MvcResult mvcResult;
+    private String result;
     @Before
     public void init(){
     }
@@ -66,10 +60,10 @@ public class MainControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/firestation").param("stationNumber", String.valueOf(1))).andExpect(MockMvcResultMatchers.status().isOk());
         //HashMap test = mockMvc.perform(MockMvcRequestBuilders.get("/firestation").param("stationNumber", String.valueOf(1))).andExpect();
         //MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/firestation").param("stationNumber", String.valueOf(1))).andReturn();
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/firestation?stationNumber=1")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("Numbers of kids\":0"));
-        assertEquals(true,s.contains("Numbers of adults\":4"));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/firestation?stationNumber=1")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("Numbers of kids\":0"));
+        assertEquals(true, result.contains("Numbers of adults\":4"));
         /*Type listOfMyClassObject = new TypeToken<ArrayList<PersonDTOFireStation>>() {}.getType();
         Gson g = new Gson();
         List<PersonDTOFireStation> listP = g.fromJson(s,listOfMyClassObject);*/
@@ -86,10 +80,10 @@ public class MainControllerTest {
         m.put("kids",listPerson);
         m.put("adults",null);
         when(personServices.kidsOfAHouse("ad")).thenReturn(m);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/childAlert?address=ad")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("adults\":null"));
-        assertEquals(true,s.contains("kids\":[{\"firstName\":\"jb\""));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/childAlert?address=ad")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("adults\":null"));
+        assertEquals(true, result.contains("kids\":[{\"firstName\":\"jb\""));
     }
 
     @Test
@@ -98,9 +92,9 @@ public class MainControllerTest {
         list.add("num1");
         list.add("num2");
         when(personServices.findPhoneByFireStation(1)).thenReturn(list);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/phoneAlert?firestation=1")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("[\"num1\",\"num2\"]"));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/phoneAlert?firestation=1")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("[\"num1\",\"num2\"]"));
     }
 
     @Test
@@ -112,9 +106,9 @@ public class MainControllerTest {
         listPerson.add(p);
         m.put("persons",p);
         when(personServices.findPersonByAddress("ad")).thenReturn(m);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/fire?address=ad")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("{\"persons\":{\"lastName\":\"champ\",\"phone\":null,\"age\":0,\"medicalHistory\":null}}"));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/fire?address=ad")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("{\"persons\":{\"lastName\":\"champ\",\"phone\":null,\"age\":0,\"medicalHistory\":null}}"));
     }
 
 
@@ -127,10 +121,10 @@ public class MainControllerTest {
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setAddress("ad1");
         listStation.add(addressDTO);
-        when(personServices.personsFromFireStations(null)).thenReturn(listStation);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("//flood/stations?listStations=null")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("adults\":null"));
+        when(personServices.personsFromFireStations(toReturn)).thenReturn(listStation);
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("//flood/stations?listStations=1")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(false, result.contains("adults\":null"));
     }
 
     @Test
@@ -140,9 +134,9 @@ public class MainControllerTest {
         p.setEmail("gmail.com");
         list.add(p);
         when(personServices.aPerson("jb","champ")).thenReturn(list);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/personInfo?firstName=jb&lastName=champ")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("[{\"lastName\":null,\"address\":null,\"age\":0,\"email\":\"gmail.com\",\"medicalHistory\":null}]"));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/personInfo?firstName=jb&lastName=champ")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("[{\"lastName\":null,\"address\":null,\"age\":0,\"email\":\"gmail.com\",\"medicalHistory\":null}]"));
     }
 
     @Test
@@ -151,8 +145,8 @@ public class MainControllerTest {
         list.add("email1");
         list.add("email2");
         when(personServices.findEmailByCity("paris")).thenReturn(list);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/communityEmail?city=paris")).andReturn();
-        String s = mvcResult.getResponse().getContentAsString();
-        assertEquals(true,s.contains("[\"email1\",\"email2\"]"));
+        mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/communityEmail?city=paris")).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals(true, result.contains("[\"email1\",\"email2\"]"));
     }
 }
