@@ -5,6 +5,7 @@ import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashMap;
