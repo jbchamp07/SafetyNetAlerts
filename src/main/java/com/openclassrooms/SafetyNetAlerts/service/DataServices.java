@@ -6,6 +6,7 @@ import com.openclassrooms.SafetyNetAlerts.model.FireStation;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.simple.JSONObject;
@@ -266,7 +267,6 @@ public class DataServices implements IDataServices{
             }
         }
     }
-    //TODO set le medical record de la personne a null
     @Override
     public void deleteMedicalRecord(String firstName, String lastName) {
         MedicalRecord medicalRecord = null;
@@ -276,8 +276,12 @@ public class DataServices implements IDataServices{
             }
         }
         listMedicalRecords2.remove(medicalRecord);
+        for (int i = 0; i < listPersons2.size(); i++) {
+            if( (listPersons2.get(i).getFirstName().equals(medicalRecord.getFirstName())) && (listPersons2.get(i).getLastName().equals(medicalRecord.getLastName()))){
+                listPersons2.get(i).setMedicalHistory(null);
+            }
+        }
     }
-    //TODO set le medical record de la personne a jours
     @Override
     public void updateMedicalRecord(MedicalRecord medicalRecord) {
         MedicalRecord oldMedicalRecord = new MedicalRecord();
@@ -288,6 +292,11 @@ public class DataServices implements IDataServices{
         }
         listMedicalRecords2.remove(oldMedicalRecord);
         listMedicalRecords2.add(medicalRecord);
+        for (int i = 0; i < listPersons2.size(); i++) {
+            if( (listPersons2.get(i).getFirstName().equals(medicalRecord.getFirstName())) && (listPersons2.get(i).getLastName().equals(medicalRecord.getLastName()))){
+                listPersons2.get(i).setMedicalHistory(medicalRecord);
+            }
+        }
     }
     @Override
     public List<Person> getListPersons2(){
@@ -424,5 +433,35 @@ public class DataServices implements IDataServices{
         return m;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataServices that = (DataServices) o;
+        return Objects.equals(listPersons, that.listPersons) && Objects.equals(listMedicalRecords, that.listMedicalRecords) && Objects.equals(listFireStations, that.listFireStations) && Objects.equals(listPersons2, that.listPersons2) && Objects.equals(listMedicalRecords2, that.listMedicalRecords2) && Objects.equals(listFireStations2, that.listFireStations2) && Objects.equals(path, that.path) && Objects.equals(listPersonOfAFireStation, that.listPersonOfAFireStation) && Objects.equals(parser, that.parser) && Objects.equals(obj, that.obj) && Objects.equals(jo, that.jo) && Objects.equals(gson, that.gson) && Objects.equals(modelMapper, that.modelMapper);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(listPersons, listMedicalRecords, listFireStations, listPersons2, listMedicalRecords2, listFireStations2, path, listPersonOfAFireStation, parser, obj, jo, gson, modelMapper);
+    }
+
+    @Override
+    public String toString() {
+        return "DataServices{" +
+                "listPersons=" + listPersons +
+                ", listMedicalRecords=" + listMedicalRecords +
+                ", listFireStations=" + listFireStations +
+                ", listPersons2=" + listPersons2 +
+                ", listMedicalRecords2=" + listMedicalRecords2 +
+                ", listFireStations2=" + listFireStations2 +
+                ", path='" + path + '\'' +
+                ", listPersonOfAFireStation=" + listPersonOfAFireStation +
+                ", parser=" + parser +
+                ", obj=" + obj +
+                ", jo=" + jo +
+                ", gson=" + gson +
+                ", modelMapper=" + modelMapper +
+                '}';
+    }
 }
