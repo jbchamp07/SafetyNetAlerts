@@ -30,7 +30,6 @@ public class MainController {
     }
 
 
-    //TODO
     //return list person who has stationNumber1
     @GetMapping("/firestation")
     public HashMap firestation(@RequestParam(name="stationNumber", required=false, defaultValue="None") int stationNumber) {
@@ -58,7 +57,6 @@ public class MainController {
         return personServices.findPersonByAddress(address);
     }
 
-    //TODO
     //return list houses classed by address
     @GetMapping("/flood/stations")
     public List<AddressDTO> listStations(@RequestBody ListStationsRequest listStations) {

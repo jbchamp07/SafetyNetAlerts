@@ -57,7 +57,6 @@ public class DataServicesTest {
         assertEquals(4,dataServices.listPersonOfAFireStation(4).get("Numbers of adults"));
     }
 
-    //TODO
     @Test
     public void listPhoneOfAFireStationTest(){
         List<String> listPhone = new ArrayList<>();
@@ -258,12 +257,6 @@ public class DataServicesTest {
         assertEquals("jb.champetier@gmail.com",person.get(0).getEmail());
         assertEquals("123 rue lafayette",person.get(0).getAddress());
     }
-    //TODO
-    /*@Test
-    public void personsFromFireStationsTest(){
-        List<Person> listPersonsFromFireStations = new ArrayList<>();
-        assertEquals(listPersonsFromFireStations,dataServices.personsFromFireStations(Arrays.asList(new String[]{"1", "2"})));
-    }*/
     @Test
     public void kidsOfAHouseTestOkWithoutKids(){
         HashMap m = new HashMap();
