@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 //@WebMvcTest(controllers = MainController.class)
@@ -115,7 +117,7 @@ public class MainControllerTest {
     //TODO
     @Test
     public void listStationsTest() throws Exception {
-        List toReturn = new ArrayList();
+        /*List toReturn = new ArrayList();
         toReturn.add(1);
         List<AddressDTO> listStation = new ArrayList();
         AddressDTO addressDTO = new AddressDTO();
@@ -124,7 +126,16 @@ public class MainControllerTest {
         when(personServices.personsFromFireStations(toReturn)).thenReturn(listStation);
         mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("//flood/stations?listStations=1")).andReturn();
         result = mvcResult.getResponse().getContentAsString();
-        assertEquals(false, result.contains("adults\":null"));
+        assertEquals(false, result.contains("adults\":null"));*/
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/flood/stations").contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                "    \"list\": [1, 2]\n" +
+                "}").accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mvcResult =  mockMvc.perform(MockMvcRequestBuilders.get("/flood/stations").contentType(MediaType.APPLICATION_JSON).content("{\n" +
+                "    \"list\": [1, 2]\n" +
+                "}").accept(MediaType.APPLICATION_JSON)).andReturn();
+        result = mvcResult.getResponse().getContentAsString();
+        assertEquals("[]",result);
     }
 
     @Test

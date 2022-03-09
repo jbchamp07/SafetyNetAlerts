@@ -1,5 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.controller.requests.MedicalRecordRequest;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.service.MedicalRecordServices;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class MedicalRecordController {
     }
 
     @PostMapping("/medicalRecord")
-    public String medicalRecordPost(MedicalRecord medicalRecord) {
+    public String medicalRecordPost(@RequestBody MedicalRecordRequest medicalRecord) {
         medicalRecordServices.addAmedicalRecord(medicalRecord);
         return "medicalRecord added";
     }

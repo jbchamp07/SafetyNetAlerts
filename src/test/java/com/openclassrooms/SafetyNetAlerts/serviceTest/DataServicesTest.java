@@ -333,4 +333,18 @@ public class DataServicesTest {
         assertEquals("Marrack",list.get(0).getLastName());
 
     }
+
+    @Test
+    public void equalsTest(){
+        dataServices.equals("a");
+        dataServices.equals(null);
+    }
+    @Test
+    public void hashCodeTest(){
+        dataServices.hashCode();
+    }
+    @Test
+    public void toStringTest(){
+        dataServices.toString();
+    }
 }

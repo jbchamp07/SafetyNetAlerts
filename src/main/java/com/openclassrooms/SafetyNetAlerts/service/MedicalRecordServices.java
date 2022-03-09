@@ -1,8 +1,12 @@
 package com.openclassrooms.SafetyNetAlerts.service;
 
+import com.openclassrooms.SafetyNetAlerts.controller.requests.MedicalRecordRequest;
+import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,7 +18,9 @@ public class MedicalRecordServices {
         this.dataServices = dataServices;
     }
 
-    public void addAmedicalRecord(MedicalRecord medicalRecord) {
+    public void addAmedicalRecord(MedicalRecordRequest medicalRecordRequest) {
+        ModelMapper modelMapper = new ModelMapper();
+        MedicalRecord medicalRecord = modelMapper.map(medicalRecordRequest,MedicalRecord.class);
         dataServices.addMedicalRecord(medicalRecord);
     }
 

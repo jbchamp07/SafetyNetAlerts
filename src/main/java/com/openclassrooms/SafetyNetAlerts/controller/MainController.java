@@ -1,5 +1,6 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.controller.requests.ListStationsRequest;
 import com.openclassrooms.SafetyNetAlerts.dto.AddressDTO;
 import com.openclassrooms.SafetyNetAlerts.dto.PersonDTOPersonInfo;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
@@ -51,7 +52,6 @@ public class MainController {
         return personServices.findPhoneByFireStation(firestationNumber);
     }
 
-    //TODO
     //return list person of an address
     @GetMapping("/fire")
     public HashMap fire(@RequestParam(name="address", required = false, defaultValue = "None")String address) {
@@ -61,8 +61,8 @@ public class MainController {
     //TODO
     //return list houses classed by address
     @GetMapping("/flood/stations")
-    public List<AddressDTO> listStations(@RequestParam List listStations) {
-        return personServices.personsFromFireStations(listStations);
+    public List<AddressDTO> listStations(@RequestBody ListStationsRequest listStations) {
+        return personServices.personsFromFireStations(listStations.getList());
     }
 
     //return person informations

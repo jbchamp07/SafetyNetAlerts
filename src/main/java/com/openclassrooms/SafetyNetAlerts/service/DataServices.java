@@ -31,7 +31,7 @@ public class DataServices implements IDataServices{
     private List<Person> listPersons2;
     private List<MedicalRecord> listMedicalRecords2;
     private List<FireStation> listFireStations2;
-    final String path = "C:\\Users\\jbcha\\Desktop\\Formation\\projet 5\\SafetyNetAlerts\\src\\main\\resources\\data.json";
+    final String path = "src\\main\\resources\\data.json";
     private List<Person> listPersonOfAFireStation;
 
     private JSONParser parser;
