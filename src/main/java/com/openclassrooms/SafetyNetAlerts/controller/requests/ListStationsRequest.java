@@ -8,11 +8,17 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type List stations request.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ListStationsRequest {
+    /**
+     * The List.
+     */
     List list;
 
     @Override

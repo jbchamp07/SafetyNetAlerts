@@ -7,25 +7,57 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * The type Medical record controller.
+ */
 @RestController
 public class MedicalRecordController {
 
+    /**
+     * The Medical record services.
+     */
     final MedicalRecordServices medicalRecordServices;
 
+    /**
+     * Instantiates a new Medical record controller.
+     *
+     * @param medicalRecordServices the medical record services
+     */
     public MedicalRecordController(MedicalRecordServices medicalRecordServices) {
         this.medicalRecordServices = medicalRecordServices;
     }
 
+    /**
+     * Medical record post string.
+     *
+     * @param medicalRecord the medical record
+     * @return the string
+     */
     @PostMapping("/medicalRecord")
     public String medicalRecordPost(@RequestBody MedicalRecordRequest medicalRecord) {
         medicalRecordServices.addAmedicalRecord(medicalRecord);
         return "medicalRecord added";
     }
+
+    /**
+     * Medical record delete string.
+     *
+     * @param firstName the first name
+     * @param lastName  the last name
+     * @return the string
+     */
     @DeleteMapping("/medicalRecord")
     public String medicalRecordDelete(@RequestParam String firstName, @RequestParam String lastName) {
         medicalRecordServices.deleteAmedicalRecord(firstName,lastName);
         return firstName + " " + lastName + " deleted";
     }
+
+    /**
+     * Medical record put string.
+     *
+     * @param medicalRecord the medical record
+     * @return the string
+     */
     @PutMapping("/medicalRecord")
     public String medicalRecordPut(MedicalRecord medicalRecord) {
         medicalRecordServices.updateAmedicalRecord(medicalRecord);

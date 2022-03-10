@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The type Data services.
+ */
 @Data
 @Service
 @Slf4j
@@ -31,6 +34,9 @@ public class DataServices implements IDataServices{
     private List<Person> listPersons2;
     private List<MedicalRecord> listMedicalRecords2;
     private List<FireStation> listFireStations2;
+    /**
+     * The Path.
+     */
     final String path = "src\\main\\resources\\data.json";
     private List<Person> listPersonOfAFireStation;
 
@@ -40,6 +46,12 @@ public class DataServices implements IDataServices{
     private Gson gson;
     private ModelMapper modelMapper;
 
+    /**
+     * Instantiates a new Data services.
+     *
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public DataServices() throws IOException, ParseException {
         parser = new JSONParser();
         obj = parser.parse(new FileReader(path));
