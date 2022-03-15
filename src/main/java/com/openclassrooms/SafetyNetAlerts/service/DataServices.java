@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -320,7 +324,6 @@ public class DataServices implements IDataServices{
     public List<MedicalRecord> getListMedicalRecords2(){
         return listMedicalRecords2;
     }
-    //A REVOIR calcul de l'age
     @Override
     public HashMap<String,List<Person>> kidsOfAHouse(String address){
         List<Person> listAdultOfAHouse = new ArrayList<>();
@@ -403,6 +406,7 @@ public class DataServices implements IDataServices{
         List<PersonDTOStations> personDTOStations = new ArrayList<>();
         for(int i = 0; i < listPersonDeserved.size();i++){
             personDTOStations.add(modelMapper.map(listPersonDeserved.get(i), PersonDTOStations.class));
+            personDTOStations.get(i).setAge((Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(listPersonDeserved.get(i).getMedicalHistory().getBirthdate().substring(6))));
         }
 
         AddressDTO addressDTO;

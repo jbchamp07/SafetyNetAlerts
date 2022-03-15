@@ -132,12 +132,11 @@ public class MainController {
      * List stations list.
      *
      * @param city  the city
-     * @param model the model
      * @return the list
      */
 //return list of all email of a city
     @GetMapping("/communityEmail")
-    public List<String> listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city, Model model) {
+    public List<String> listStations(@RequestParam(name="city", required = false, defaultValue = "None")String city) {
         return personServices.findEmailByCity(city);
     }
 
