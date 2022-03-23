@@ -3,6 +3,7 @@ package com.openclassrooms.SafetyNetAlerts.controller;
 import com.openclassrooms.SafetyNetAlerts.controller.requests.MedicalRecordRequest;
 import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.service.MedicalRecordServices;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +60,9 @@ public class MedicalRecordController {
      * @return the string
      */
     @PutMapping("/medicalRecord")
-    public String medicalRecordPut(MedicalRecord medicalRecord) {
+    public String medicalRecordPut(@RequestBody MedicalRecordRequest medicalRecordRequest) {
+        ModelMapper modelMapper = new ModelMapper();
+        MedicalRecord medicalRecord = modelMapper.map(medicalRecordRequest,MedicalRecord.class);
         medicalRecordServices.updateAmedicalRecord(medicalRecord);
         return medicalRecord.getFirstName() + " " + medicalRecord.getLastName() + " updated";
     }

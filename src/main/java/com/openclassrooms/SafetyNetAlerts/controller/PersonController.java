@@ -1,7 +1,10 @@
 package com.openclassrooms.SafetyNetAlerts.controller;
 
+import com.openclassrooms.SafetyNetAlerts.controller.requests.PersonRequest;
+import com.openclassrooms.SafetyNetAlerts.model.MedicalRecord;
 import com.openclassrooms.SafetyNetAlerts.model.Person;
 import com.openclassrooms.SafetyNetAlerts.service.PersonServices;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,11 +30,12 @@ public class PersonController {
     /**
      * Person post string.
      *
-     * @param person the person
      * @return the string
      */
     @PostMapping("/person")
-    public String personPost(Person person) {
+    public String personPost(@RequestBody PersonRequest personRequest) {
+        ModelMapper modelMapper = new ModelMapper();
+        Person person = modelMapper.map(personRequest,Person.class);
         personServices.addAPerson(person);
         return "person added";
     }
@@ -52,11 +56,12 @@ public class PersonController {
     /**
      * Person put string.
      *
-     * @param person the person
      * @return the string
      */
     @PutMapping("/person")
-    public String personPut(Person person) {
+    public String personPut(@RequestBody PersonRequest personRequest) {
+        ModelMapper modelMapper = new ModelMapper();
+        Person person = modelMapper.map(personRequest,Person.class);
         personServices.updateAPerson(person);
         return person.getFirstName() + " " + person.getLastName() + " updated";
     }

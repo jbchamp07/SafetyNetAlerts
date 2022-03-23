@@ -31,7 +31,7 @@ public class FireStationController {
      * @return the string
      */
     @PostMapping("/firestation")
-    public String fireStationPost(FireStation fireStation) {
+    public String fireStationPost(@RequestBody FireStation fireStation) {
         fireStationServices.addAFireStation(fireStation);
         return "fireStation added";
     }
@@ -55,7 +55,7 @@ public class FireStationController {
      * @return the string
      */
     @PutMapping("/firestation")
-    public String fireStationPut(FireStation fireStation) {
+    public String fireStationPut(@RequestBody FireStation fireStation) {
         fireStationServices.updateAFireStation(fireStation);
         return fireStation.getAddress() + " " + fireStation.getStation() + " updated";
     }
